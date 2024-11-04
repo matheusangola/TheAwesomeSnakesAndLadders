@@ -29,7 +29,7 @@ namespace TheAwesomeSnakesAndLadders
 
         private void CreateBoardGrid(int size)
         {
-            boardPanel.Controls.Clear();
+            boardPanel.Controls.Clear(); 
             int cellSize = boardPanel.Width / size;
             int totalCells = size * size;
 
@@ -78,7 +78,7 @@ namespace TheAwesomeSnakesAndLadders
 
             CreateBoardGrid(boardSize);
 
-            // Initialize the game board and player objects
+            // Initialize the game board and player objects 
             gameBoard = new Board(boardSize);
             player = new Player();
         }
