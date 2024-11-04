@@ -64,7 +64,7 @@
             // 
             this.boardPanel.Location = new System.Drawing.Point(232, 130);
             this.boardPanel.Name = "boardPanel";
-            this.boardPanel.Size = new System.Drawing.Size(900, 900);
+            this.boardPanel.Size = new System.Drawing.Size(920, 950);
             this.boardPanel.TabIndex = 2;
             // 
             // label1
@@ -111,7 +111,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1395, 1079);
+            this.ClientSize = new System.Drawing.Size(1406, 1125);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
