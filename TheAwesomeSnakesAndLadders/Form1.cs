@@ -29,7 +29,7 @@ namespace TheAwesomeSnakesAndLadders
 
         private void CreateBoardGrid(int size)
         {
-            boardPanel.Controls.Clear(); 
+            boardPanel.Controls.Clear();
             int cellSize = boardPanel.Width / size;
             int totalCells = size * size;
 
@@ -41,27 +41,35 @@ namespace TheAwesomeSnakesAndLadders
 
                     if (row % 2 == 0)
                     {
-                        // For even rows, fill left-to-right
                         cellNumber = totalCells - (row * size + col);
                     }
-                    //only if we need to use it in the future
+                    // Not using this, but if needed we can adjust it here. Order of rolls
                     else
                     {
-                        // For odd rows, fill right-to-left
                         cellNumber = totalCells - (row * size + (size - col - 1));
                     }
 
-                    // Create a new label with the number for each cell
+                    // Create a new label with number for each cell
                     Label cell = new Label
                     {
                         Text = cellNumber.ToString(),
                         TextAlign = ContentAlignment.MiddleCenter,
                         Size = new Size(cellSize, cellSize),
-                        BorderStyle = BorderStyle.FixedSingle,
-                        BackColor = Color.White
+                        BorderStyle = BorderStyle.FixedSingle
                     };
 
-                    // Set the location of the label within the panel
+                    // Alternating colors
+                    //// Maybe we can add a choice for the user? ////
+                    if ((row + col) % 2 == 0)
+                    {
+                        cell.BackColor = Color.LightBlue;
+                    }
+                    else
+                    {
+                        cell.BackColor = Color.LightGreen;
+                    }
+
+                    // Set location within boardPanel
                     cell.Location = new Point(col * cellSize, row * cellSize);
 
                     // Add the cell to the boardPanel
@@ -69,6 +77,7 @@ namespace TheAwesomeSnakesAndLadders
                 }
             }
         }
+
 
 
 
