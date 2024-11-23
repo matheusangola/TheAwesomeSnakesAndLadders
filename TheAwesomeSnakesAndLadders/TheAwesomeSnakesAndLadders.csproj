@@ -46,18 +46,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="FormGame.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="FormGame.Designer.cs">
+      <DependentUpon>FormGame.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSelectLevel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSelectLevel.Designer.cs">
+      <DependentUpon>FormSelectLevel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSetPlayer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSetPlayer.Designer.cs">
+      <DependentUpon>FormSetPlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="GameLogic\Board.cs" />
+    <Compile Include="GameLogic\Controller.cs" />
+    <Compile Include="GameLogic\Dice.cs" />
+    <Compile Include="GameLogic\Ladder.cs" />
+    <Compile Include="GameLogic\MysteryBox.cs" />
     <Compile Include="GameLogic\Player.cs" />
+    <Compile Include="GameLogic\Snake.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="FormGame.resx">
+      <DependentUpon>FormGame.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSelectLevel.resx">
+      <DependentUpon>FormSelectLevel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSetPlayer.resx">
+      <DependentUpon>FormSetPlayer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

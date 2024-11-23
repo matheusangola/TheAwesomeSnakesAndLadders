@@ -11,11 +11,11 @@ using TheAwesomeSnakesAndLadders.GameLogic;
 
 namespace TheAwesomeSnakesAndLadders
 {
-    public partial class Form1 : Form
+    public partial class FormGame : Form
     {
         private Board gameBoard;
         private Player player;
-        public Form1()
+        public FormGame()
         {
             InitializeComponent();
             boardSizeComboBox.SelectedIndex = 0; 
@@ -90,6 +90,11 @@ namespace TheAwesomeSnakesAndLadders
             // Initialize the game board and player objects 
             gameBoard = new Board(boardSize);
             player = new Player();
+        }
+
+        private void boardSizeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

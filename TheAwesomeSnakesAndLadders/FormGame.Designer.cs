@@ -1,6 +1,6 @@
 ﻿namespace TheAwesomeSnakesAndLadders
 {
-    partial class Form1
+    partial class FormGame
     {
         /// <summary>
         /// Required designer variable.
@@ -42,13 +42,14 @@
             this.boardSizeComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.14286F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.boardSizeComboBox.FormattingEnabled = true;
             this.boardSizeComboBox.Items.AddRange(new object[] {
-            "6x6",
+            "5x5",
             "8x8",
             "10x10"});
             this.boardSizeComboBox.Location = new System.Drawing.Point(458, 43);
             this.boardSizeComboBox.Name = "boardSizeComboBox";
             this.boardSizeComboBox.Size = new System.Drawing.Size(200, 62);
             this.boardSizeComboBox.TabIndex = 0;
+            this.boardSizeComboBox.SelectedIndexChanged += new System.EventHandler(this.boardSizeComboBox_SelectedIndexChanged);
             // 
             // startGameButton
             // 
@@ -107,7 +108,7 @@
             this.label4.TabIndex = 6;
             this.label4.Text = "label4";
             // 
-            // Form1
+            // FormGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -119,8 +120,8 @@
             this.Controls.Add(this.boardPanel);
             this.Controls.Add(this.startGameButton);
             this.Controls.Add(this.boardSizeComboBox);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "FormGame";
+            this.Text = "FormGame";
             this.ResumeLayout(false);
             this.PerformLayout();
 
