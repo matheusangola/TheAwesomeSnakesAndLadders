@@ -8,7 +8,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 {
     internal class Dice
     {
-        private static readonly Random RandomGenerator = new Random();
+        public static readonly Random RandomGenerator = new Random();
 
         public int Sides { get; private set; }
 
