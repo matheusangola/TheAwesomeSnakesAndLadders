@@ -11,11 +11,20 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
         
             public int Size { get; set; }
 
-            public Board(int size)
+        public Board(string gameDificulty)
+        {
+            if (gameDificulty == "Easy")
             {
-                Size = size;
+                Size = 7;
+            } else if (gameDificulty == "Medium")
+            {
+                Size = 10;
+            } else
+            {
+                Size = 12;
             }
 
+        }
 
     }
 }

@@ -107,6 +107,7 @@
             this.label4.Size = new System.Drawing.Size(66, 27);
             this.label4.TabIndex = 6;
             this.label4.Text = "label4";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // FormGame
             // 
