@@ -29,6 +29,7 @@ namespace TheAwesomeSnakesAndLadders
             }
             var nextForm = new FormGame(playerQuantity, gameDificulty, playerList);
             nextForm.Show();
+            nextForm.Size = new Size(1500, 1000);
             this.Hide();
 
         }
@@ -73,6 +74,9 @@ namespace TheAwesomeSnakesAndLadders
 
         }
 
+        private void FormSetPlayer_Load(object sender, EventArgs e)
+        {
 
+        }
     }
 }

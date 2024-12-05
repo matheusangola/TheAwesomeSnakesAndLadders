@@ -28,101 +28,50 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.boardSizeComboBox = new System.Windows.Forms.ComboBox();
-            this.startGameButton = new System.Windows.Forms.Button();
-            this.boardPanel = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // boardSizeComboBox
+            // pictureBox1
             // 
-            this.boardSizeComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.14286F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.boardSizeComboBox.FormattingEnabled = true;
-            this.boardSizeComboBox.Items.AddRange(new object[] {
-            "5x5",
-            "8x8",
-            "10x10"});
-            this.boardSizeComboBox.Location = new System.Drawing.Point(458, 43);
-            this.boardSizeComboBox.Name = "boardSizeComboBox";
-            this.boardSizeComboBox.Size = new System.Drawing.Size(200, 62);
-            this.boardSizeComboBox.TabIndex = 0;
-            this.boardSizeComboBox.SelectedIndexChanged += new System.EventHandler(this.boardSizeComboBox_SelectedIndexChanged);
-            // 
-            // startGameButton
-            // 
-            this.startGameButton.Location = new System.Drawing.Point(895, 43);
-            this.startGameButton.Name = "startGameButton";
-            this.startGameButton.Size = new System.Drawing.Size(140, 59);
-            this.startGameButton.TabIndex = 1;
-            this.startGameButton.Text = "Start";
-            this.startGameButton.UseVisualStyleBackColor = true;
-            this.startGameButton.Click += new System.EventHandler(this.startGameButton_Click);
-            // 
-            // boardPanel
-            // 
-            this.boardPanel.Location = new System.Drawing.Point(232, 130);
-            this.boardPanel.Name = "boardPanel";
-            this.boardPanel.Size = new System.Drawing.Size(920, 950);
-            this.boardPanel.TabIndex = 2;
+            this.pictureBox1.Location = new System.Drawing.Point(883, 585);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(38, 83, 3, 37);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(100, 50);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label1.Location = new System.Drawing.Point(1219, 204);
+            this.label1.Location = new System.Drawing.Point(866, 216);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 27);
-            this.label1.TabIndex = 3;
+            this.label1.Size = new System.Drawing.Size(64, 25);
+            this.label1.TabIndex = 1;
             this.label1.Text = "label1";
             // 
-            // label2
+            // groupBox1
             // 
-            this.label2.AutoSize = true;
-            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label2.Location = new System.Drawing.Point(1219, 257);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(66, 27);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "label2";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label3.Location = new System.Drawing.Point(1219, 314);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(66, 27);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "label3";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label4.Location = new System.Drawing.Point(1219, 368);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(66, 27);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "label4";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
+            this.groupBox1.Location = new System.Drawing.Point(1141, 700);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(200, 100);
+            this.groupBox1.TabIndex = 2;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "groupBox1";
             // 
             // FormGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1406, 1125);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.boardPanel);
-            this.Controls.Add(this.startGameButton);
-            this.Controls.Add(this.boardSizeComboBox);
+            this.Controls.Add(this.pictureBox1);
             this.Name = "FormGame";
             this.Text = "FormGame";
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -130,13 +79,9 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox boardSizeComboBox;
-        private System.Windows.Forms.Button startGameButton;
-        private System.Windows.Forms.Panel boardPanel;
+        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 
