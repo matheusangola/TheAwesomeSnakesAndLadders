@@ -8,6 +8,20 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 {
     internal class Ladder
     {
+        int top;
+        int bottom;
+        float ladderLength;
 
+        public Ladder()
+        {
+            top = 0;
+            bottom = 0;
+            
+        }
+
+        private void calcTop()
+        {
+
+        }
     }
 }

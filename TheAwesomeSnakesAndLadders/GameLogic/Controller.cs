@@ -16,19 +16,14 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
         List<Player> listPlayers;
 
 
-        public Controller(string gameDificultyInput, List<Player> listPlayerInput) 
+        public Controller(string gameDificultyInput, List<Player> listPlayerInput, FormGame formgame) 
         {
             gameDificulty = gameDificultyInput;
             listPlayers = listPlayerInput;
             listDice = new List<Dice>();
             currentPlayer = listPlayers[0];
-            gameBoard = new Board(gameDificulty);
+            gameBoard = new Board(gameDificulty, formgame);
             
-        }
-
-        public void setBoard()
-        {
-
         }
 
         public void rollDice() 

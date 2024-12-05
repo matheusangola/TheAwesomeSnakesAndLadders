@@ -37,6 +37,7 @@
             this.ClientSize = new System.Drawing.Size(1042, 658);
             this.Name = "FormSetPlayer";
             this.Text = "FormSetPlayer";
+            this.Load += new System.EventHandler(this.FormSetPlayer_Load);
             this.ResumeLayout(false);
 
         }

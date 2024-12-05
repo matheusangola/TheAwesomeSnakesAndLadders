@@ -22,10 +22,12 @@ namespace TheAwesomeSnakesAndLadders
         private void nextBtn_Click(object sender, EventArgs e)
         {
             int playerQuantity = Int32.Parse(numberOfPlayers.SelectedItem.ToString());
-            string gameDificulty = gameLevel.SelectedText;
+            string gameDificulty = gameLevel.SelectedItem.ToString();
             var nextForm = new FormSetPlayer(playerQuantity, gameDificulty);
             nextForm.Show();
             this.Hide();
         }
+
+
     }
 }
