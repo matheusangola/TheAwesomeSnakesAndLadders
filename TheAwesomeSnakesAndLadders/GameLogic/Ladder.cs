@@ -8,5 +8,6 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 {
     internal class Ladder
     {
+
     }
 }
