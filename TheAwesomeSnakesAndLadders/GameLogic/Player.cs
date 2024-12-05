@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace TheAwesomeSnakesAndLadders.GameLogic
 {
-    internal class Player
+    public class Player
     {
-
+        string name;
+        public Player (string nameInput)
+        {
+            name = nameInput;
+        }
     }
 }

@@ -15,10 +15,12 @@ namespace TheAwesomeSnakesAndLadders
     {
         private Board gameBoard;
         private Player player;
-        public FormGame()
+        private Controller myController;
+        public FormGame(int playerQuantity, string gameDificulty, List<Player> listPlayer)
         {
             InitializeComponent();
             boardSizeComboBox.SelectedIndex = 0; 
+            myController = new Controller(gameDificulty, listPlayer);
         }
 
         private int GetBoardSizeFromComboBox()
@@ -87,12 +89,14 @@ namespace TheAwesomeSnakesAndLadders
 
             CreateBoardGrid(boardSize);
 
-            // Initialize the game board and player objects 
-            gameBoard = new Board(boardSize);
-            player = new Player();
         }
 
         private void boardSizeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
         {
 
         }
