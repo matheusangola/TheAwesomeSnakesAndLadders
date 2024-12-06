@@ -50,10 +50,9 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
             CreateAvailableSpots();
             CreateBoardGrid(formgame);
+            CreateMysteryBoxes(formgame);
             CreateLadders(formgame);
             CreateSnakes(formgame);
-            CreateMysteryBoxes(formgame);
-
         }
 
         private void CreateBoardGrid(FormGame formgame)
@@ -85,32 +84,50 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                         cellNumber = totalCells - (row * Size + (Size - col - 1));
                     }
 
-                    // Create a new label with number for each cell
-                    Label cell = new Label
+                    // Create a new panel with number for each cell
+                    Panel newPanel = new Panel()
                     {
-                        Text = cellNumber.ToString(),
-                        TextAlign = ContentAlignment.MiddleCenter,
+                        Name = $"cell{cellNumber}",
                         Size = new Size(cellSize, cellSize),
                         BorderStyle = BorderStyle.FixedSingle,
-                        Name = $"cell{cellNumber}"
+                        Padding = new Padding(10,10,10,10)
                     };
+
+                    
 
                     // Alternating colors
                     //// Maybe we can add a choice for the user? ////
                     if ((row + col) % 2 == 0)
                     {
-                        cell.BackColor = Color.LightBlue;
+                        newPanel.BackColor = Color.LightBlue;
                     }
                     else
                     {
-                        cell.BackColor = Color.LightGreen;
+                        newPanel.BackColor = Color.LightGreen;
                     }
 
                     // Set location within boardPanel
-                    cell.Location = new Point(col * cellSize, row * cellSize);
+                    newPanel.Location = new Point(col * cellSize, row * cellSize);
 
                     // Add the cell to the boardPanel
-                    boardPanel.Controls.Add(cell);
+                    boardPanel.Controls.Add(newPanel);
+
+                    // Create a new label with number for each cell
+
+                    Label newLabel = new Label
+                    {
+                        Text = cellNumber.ToString(),
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        Size = new Size(cellSize, cellSize),
+                        BorderStyle = BorderStyle.FixedSingle,
+                        BackColor = Color.Transparent,
+                        Name = $"label{cellNumber}"
+                    };
+
+                    newPanel.Controls.Add(newLabel);
+
+
+
                 }
             }
             formgame.Controls.Add(boardPanel);
