@@ -65,6 +65,7 @@
       <DependentUpon>FormSetPlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="GameLogic\Board.cs" />
+    <Compile Include="GameLogic\Cell.cs" />
     <Compile Include="GameLogic\Controller.cs" />
     <Compile Include="GameLogic\Dice.cs" />
     <Compile Include="GameLogic\Ladder.cs" />

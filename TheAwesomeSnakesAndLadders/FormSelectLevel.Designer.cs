@@ -103,6 +103,7 @@
             this.Controls.Add(this.numberOfPlayers);
             this.Name = "FormSelectLevel";
             this.Text = "FormSelectLevel";
+            this.Load += new System.EventHandler(this.FormSelectLevel_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

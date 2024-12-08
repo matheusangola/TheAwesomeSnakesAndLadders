@@ -30,11 +30,11 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             {
                 newPosition = r.Next(minPosition, maxPosition);
 
-            } while (board.AvailableSpots[newPosition - 1] == false);
+            } while (board.CellList[newPosition - 1].IsAvailable == false);
 
             Position = newPosition;
 
-            board.AvailableSpots[newPosition - 1] = false;
+            board.CellList[newPosition - 1].IsAvailable = false;
             Panel selectedCell = formgame.Controls.Find("boardPanel", false)[0].Controls.Find($"cell{newPosition}", false)[0] as Panel;
             int paddingSize = 10;
             int newSize = selectedCell.Size.Width - 2*paddingSize;

@@ -22,7 +22,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
         public List<Ladder> LadderList { get; set; }
         public List<MysteryBox> MysteryBoxList { get; set; }
 
-        public List<Boolean> AvailableSpots { get; set; }
+        public List<Cell> CellList { get; set; }
 
 
 
@@ -48,7 +48,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                 MysteryBoxQuantity = 11;
             }
 
-            CreateAvailableSpots();
+            CreateCells();
             CreateBoardGrid(formgame);
             CreateMysteryBoxes(formgame);
             CreateLadders(formgame);
@@ -138,9 +138,11 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
         }
 
+
+
         private void CreateLadders(FormGame formgame)
         {
-
+            Ladder newLadder = new Ladder(formgame, this);
         }
 
         private void CreateMysteryBoxes(FormGame formgame)
@@ -153,13 +155,35 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             }
         }
 
-        private void CreateAvailableSpots()
+        private void CreateCells()
         {
-            AvailableSpots = new List<bool>();
-            for (int i = 0; i < Size*Size; i++)
+            int newDeltaX = 1;
+            int newDeltaY = 0;
+            int row = 1;
+            CellList = new List<Cell>();
+            for (int i = 1; i <= Size*Size; i++)
             {
-                AvailableSpots.Add(true);
+                if (i % Size == 0)
+                {
+                    newDeltaX = 0;
+                    newDeltaY = 1;
+                    row++;
+                }
+                else if (row % 2 == 1)
+                {
+                    newDeltaX = 1;
+                    newDeltaY = 0;
+                } else if (row % 2 == 0)
+                {
+                    newDeltaX = -1;
+                    newDeltaY = 0;
+                }
+                Cell newCell = new Cell(true, newDeltaX, newDeltaY);
+                CellList.Add(newCell);
+                Console.WriteLine($"cellnumber = {i}, {newCell}");
             }
         }
+
+        
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -34,18 +35,18 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             {
                 newBottom = r.Next(minBottom, maxBottom);
 
-            } while (board.AvailableSpots[newBottom - 1] == false);
+            } while (board.CellList[newBottom - 1].IsAvailable == false);
 
             Bottom = newBottom;
 
-            board.AvailableSpots[newBottom - 1] = false;
+            board.CellList[newBottom - 1].IsAvailable = false;
             
         }
 
         private void InitializeTop(FormGame formgame, Board board)
         {
-            int minTop = Bottom + board.Size;
-            int maxTop = board.Size * board.Size - 5;
+            int minTop = Bottom + board.Size -3;
+            int maxTop = board.Size * board.Size -3;
 
             Random r = new Random();
             int newTop;
@@ -53,11 +54,11 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             {
                 newTop = r.Next(minTop, maxTop);
 
-            } while (board.AvailableSpots[newTop - 1] == false);
+            } while (board.CellList[newTop - 1].IsAvailable == false);
 
             Top = newTop;
 
-            board.AvailableSpots[newTop - 1] = false;
+            board.CellList[newTop - 1].IsAvailable = false;
         }
 
         
@@ -69,7 +70,25 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
         private void GenerateImage(FormGame formgame, Board board)
         {
+            ///////criar novo painel OU renderizar painel de novo/////////
+            PictureBox pb = new PictureBox()
+            {
+                //Image = Image.FromFile("../../Images/Ladder.jpg"),
+                Size = new Size(500, 500),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Location = new Point(0, 0),
+            };
+            pb.Paint += OnPaint;
+            formgame.Controls.Find("boardPanel", false)[0].Controls.Add(pb);
+            pb.BringToFront();
+        }
 
+        protected void OnPaint(object sender, PaintEventArgs e)
+        {
+            var ladder = new Bitmap("../../Images/Ladder.jpg");
+            e.Graphics.RotateTransform(20.0F);
+
+            e.Graphics.DrawImage(ladder, 160, 160, 150, 150);
         }
 
 
