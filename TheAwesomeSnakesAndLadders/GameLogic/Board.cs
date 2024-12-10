@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
+using Image = System.Drawing.Image;
 
 namespace TheAwesomeSnakesAndLadders.GameLogic
 {
@@ -24,44 +25,76 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
         public List<Cell> CellList { get; set; }
 
+        public FormGame MyFormGame { get; set; }
+
+        public List<Player> PlayerList { get; set; }
+        public int FontSize;
 
 
-        public Board(string gameDificulty, FormGame formgame)
+
+        public Board(string gameDificulty, List<Player> playerList, FormGame formgame)
         {
+            MyFormGame = formgame;
+            PlayerList = playerList;
             if (gameDificulty == "Easy")
             {
-                Size = 5;
+                Size = 6;
                 SnakeQuantity = 4;
                 LadderQuantity = 4;
                 MysteryBoxQuantity = 4;
+                FontSize = 25;
             } else if (gameDificulty == "Medium")
             {
                 Size = 8;
                 SnakeQuantity = 7;
                 LadderQuantity = 7;
                 MysteryBoxQuantity = 7;
-            } else
+                FontSize = 20;
+            }
+            else
             {
-                Size = 12;
+                Size = 10;
                 SnakeQuantity = 11;
                 LadderQuantity = 11;
                 MysteryBoxQuantity = 11;
+                FontSize = 15;
             }
 
             CreateCells();
-            CreateBoardGrid(formgame);
-            CreateMysteryBoxes(formgame);
-            CreateLadders(formgame);
-            CreateSnakes(formgame);
+            CreateBoardGrid();
+            CreateMysteryBoxes();
+            CreateLadders();
+            CreateSnakes();
+            CreatePlayerPin();
         }
 
-        private void CreateBoardGrid(FormGame formgame)
+        private void CreatePlayerPin()
+        {
+            int pinSize = 3 * FontSize;
+            for (int i = 0; i < PlayerList.Count; i++)
+            {
+                PictureBox pb = new PictureBox()
+                {
+                    Name = $"playerPin{i+1}",
+                    Image = Image.FromFile($"../../Images/Pin{PlayerList[i].Color}.png"),
+                    Size = new Size(pinSize, pinSize),
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                    Location = new Point(10+pinSize*i, 810),
+                    BackColor = Color.Transparent,
+                };
+                MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Add(pb);
+                pb.BackColor = Color.Transparent;
+            }
+           
+        }
+
+        private void CreateBoardGrid()
         {
             
             Panel boardPanel = new System.Windows.Forms.Panel()
             {
-                    Location = new Point(350, 100),
-                    Size = new System.Drawing.Size(800, 800),
+                    Location = new Point(350, 30),
+                    Size = new System.Drawing.Size(800, 900),
                     Name = "boardPanel"
             };
             boardPanel.Controls.Clear();
@@ -118,6 +151,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                     {
                         Text = cellNumber.ToString(),
                         TextAlign = ContentAlignment.MiddleCenter,
+                        Font = new Font("Arial", FontSize),
                         Size = new Size(cellSize, cellSize),
                         BorderStyle = BorderStyle.FixedSingle,
                         BackColor = Color.Transparent,
@@ -130,27 +164,27 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
                 }
             }
-            formgame.Controls.Add(boardPanel);
+            MyFormGame.Controls.Add(boardPanel);
         }
 
-        private void CreateSnakes(FormGame formgame)
+        private void CreateSnakes()
         {
 
         }
 
 
 
-        private void CreateLadders(FormGame formgame)
+        private void CreateLadders()
         {
-            Ladder newLadder = new Ladder(formgame, this);
+            Ladder newLadder = new Ladder(MyFormGame, this);
         }
 
-        private void CreateMysteryBoxes(FormGame formgame)
+        private void CreateMysteryBoxes()
         {
             MysteryBoxList = new List<MysteryBox>();
             for (int i = 1; i <= MysteryBoxQuantity; i++)
             {
-                MysteryBox newMysteryBox = new MysteryBox(formgame, this);
+                MysteryBox newMysteryBox = new MysteryBox(MyFormGame, this);
                 MysteryBoxList.Add(newMysteryBox);
             }
         }
@@ -159,6 +193,8 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
         {
             int newDeltaX = 1;
             int newDeltaY = 0;
+            int newX = 0;
+            int newY = 0;
             int row = 1;
             CellList = new List<Cell>();
             for (int i = 1; i <= Size*Size; i++)
@@ -178,8 +214,10 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                     newDeltaX = -1;
                     newDeltaY = 0;
                 }
-                Cell newCell = new Cell(true, newDeltaX, newDeltaY);
+                Cell newCell = new Cell(true, newX, newY, newDeltaX, newDeltaY);
                 CellList.Add(newCell);
+                newX += newDeltaX;
+                newY += newDeltaY;
                 Console.WriteLine($"cellnumber = {i}, {newCell}");
             }
         }

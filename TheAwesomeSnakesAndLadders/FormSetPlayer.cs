@@ -13,39 +13,41 @@ namespace TheAwesomeSnakesAndLadders
 {
     public partial class FormSetPlayer : Form
     {
-        int playerQuantity;
-        string gameDificulty;
-        List<Player> playerList;
+        int PlayerQuantity;
+        string GameDificulty;
+        List<Player> PlayerList;
+        List<String> ColorList;
         private void submitButtonClicked(object sender, EventArgs e)
         {
-            foreach (Control c in this.Controls)
+            for (int i = 0; i < PlayerQuantity; i++)
             {
-                if (c.GetType() == typeof(TextBox))
-                {
-                    Player p = new Player(c.Text);
-                    playerList.Add(p);
+                TextBox selectedTextbox = (TextBox)this.Controls.Find($"textbox{i + 1}", false)[0];                {
+                    Player p = new Player(selectedTextbox.Text, ColorList[i], i+1);
+                    PlayerList.Add(p);
+                    Console.WriteLine($"player {p}");
                 }
                 
             }
-            var nextForm = new FormGame(playerQuantity, gameDificulty, playerList);
+            var nextForm = new FormGame(PlayerQuantity, GameDificulty, PlayerList);
             nextForm.Show();
-            nextForm.Size = new Size(1500, 1000);
+            nextForm.Size = new Size(1700, 1000);
             this.Hide();
 
         }
 
         public FormSetPlayer(int playerQuantityInput, string gameDificultyInput)
         {
-            playerQuantity = playerQuantityInput;
-            gameDificulty = gameDificultyInput;
-            playerList = new List<Player>();
+            PlayerQuantity = playerQuantityInput;
+            GameDificulty = gameDificultyInput;
+            PlayerList = new List<Player>();
+            ColorList = new List<string>() { "Blue", "Red", "Green", "Yellow" };
 
             InitializeComponent();
-            for (int i = 0; i < playerQuantity; i++)
+            for (int i = 0; i < PlayerQuantity; i++)
             {
                 var playerLabel = new System.Windows.Forms.Label()
                 {
-                    Text = $"Player {i + 1} name: ",
+                    Text = $"Player {i + 1} name {ColorList[i]}: ",
                     Location = new Point(180, 120 + 30 * i),
                     Size = new System.Drawing.Size(80, 15),
                     Name = $"label{i + 1}"
@@ -63,7 +65,7 @@ namespace TheAwesomeSnakesAndLadders
             var submitButton = new System.Windows.Forms.Button()
             {
                 Text = "Submit",
-                Location = new Point(270, 115 + 30 * playerQuantity),
+                Location = new Point(270, 115 + 30 * PlayerQuantity),
                 Size = new System.Drawing.Size(100, 20),
                 Name = "submitButton",
             };

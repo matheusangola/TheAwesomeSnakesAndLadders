@@ -71,16 +71,16 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
         private void GenerateImage(FormGame formgame, Board board)
         {
             ///////criar novo painel OU renderizar painel de novo/////////
-            PictureBox pb = new PictureBox()
-            {
-                //Image = Image.FromFile("../../Images/Ladder.jpg"),
-                Size = new Size(500, 500),
-                SizeMode = PictureBoxSizeMode.Zoom,
-                Location = new Point(0, 0),
-            };
-            pb.Paint += OnPaint;
-            formgame.Controls.Find("boardPanel", false)[0].Controls.Add(pb);
-            pb.BringToFront();
+            //PictureBox pb = new PictureBox()
+            //{
+            //    //Image = Image.FromFile("../../Images/Ladder.jpg"),
+            //    Size = new Size(500, 500),
+            //    SizeMode = PictureBoxSizeMode.Zoom,
+            //    Location = new Point(0, 0),
+            //};
+            //pb.Paint += OnPaint;
+            //formgame.Controls.Find("boardPanel", false)[0].Controls.Add(pb);
+            //pb.BringToFront();
         }
 
         protected void OnPaint(object sender, PaintEventArgs e)
