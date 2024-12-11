@@ -11,7 +11,7 @@ using Image = System.Drawing.Image;
 
 namespace TheAwesomeSnakesAndLadders.GameLogic
 {
-    internal class Board
+    public class Board
     {
         
         public int Size { get; set; }
@@ -157,7 +157,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                         BackColor = Color.Transparent,
                         Name = $"label{cellNumber}"
                     };
-
+                   
                     newPanel.Controls.Add(newLabel);
 
 
@@ -181,11 +181,14 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
         private void CreateMysteryBoxes()
         {
+            int mysteryBoxPosition;
             MysteryBoxList = new List<MysteryBox>();
             for (int i = 1; i <= MysteryBoxQuantity; i++)
             {
                 MysteryBox newMysteryBox = new MysteryBox(MyFormGame, this);
                 MysteryBoxList.Add(newMysteryBox);
+                mysteryBoxPosition = newMysteryBox.Position;
+                CellList[mysteryBoxPosition - 1].MyMysteryBox = newMysteryBox;
             }
         }
 

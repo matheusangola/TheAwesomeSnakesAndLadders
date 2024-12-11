@@ -212,6 +212,8 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
                 remainingMovements--;
 
+
+
                 //Check if gameover
                 if (CheckGameOver())
                 {
@@ -222,8 +224,12 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
             }
             while (remainingMovements > 0);
-            //Check destination cell
+            //////WORKING HERE //////
+            // CheckMysteryBox
+            if (GameBoard.CellList[CurrentPlayer.CellNumber - 1].MyMysteryBox != null)
+            {
 
+            }
 
             // Snake or Ladder movement
 
@@ -236,13 +242,15 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             if (CurrentPlayer.CellNumber == GameBoard.Size * GameBoard.Size)
             {
                 
-                MessageBox.Show($"{CurrentPlayer.Name} won the game!");
-                //eerror n, returning null
-                MyFormGame.Parent.Parent.Show();
+                if(MessageBox.Show($"{CurrentPlayer.Name} won the game!\nRestart Game?", "Game Over", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    FormSelectLevel newFormSelectLevel = new FormSelectLevel();
+                    newFormSelectLevel.Show();
+                } 
                 MyFormGame.Close();
-
                 return true;
-            } return false;
+            }
+            return false;
         }
     }
 }

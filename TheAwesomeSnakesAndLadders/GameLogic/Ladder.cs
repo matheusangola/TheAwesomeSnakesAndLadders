@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace TheAwesomeSnakesAndLadders.GameLogic
 {
-    internal class Ladder
+    public class Ladder
     {
         int Top;
         int Bottom;

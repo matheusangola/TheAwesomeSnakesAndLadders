@@ -9,7 +9,7 @@ using System.Windows.Forms.VisualStyles;
 
 namespace TheAwesomeSnakesAndLadders.GameLogic
 {
-    internal class MysteryBox
+    public class MysteryBox
     {
         public int Position;
         public int Destination;

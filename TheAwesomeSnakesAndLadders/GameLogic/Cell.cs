@@ -13,6 +13,9 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
         public int NextCellDeltaY;
         public int X;
         public int Y;
+        public MysteryBox MyMysteryBox;
+        public Snake MySnake;
+        public Ladder MyLadder;
 
         public Cell(Boolean isAvailable, int x, int y, int nextCellDeltaX, int nextCellDeltaY)
         {
@@ -21,6 +24,9 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             Y = y;
             NextCellDeltaX = nextCellDeltaX;
             NextCellDeltaY = nextCellDeltaY;
+            MyMysteryBox = null;
+            MyLadder = null;
+            MySnake = null;
         }
         public override string ToString()
         {
