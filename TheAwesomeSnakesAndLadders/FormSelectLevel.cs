@@ -28,6 +28,9 @@ namespace TheAwesomeSnakesAndLadders
             this.Hide();
         }
 
+        private void FormSelectLevel_Load(object sender, EventArgs e)
+        {
 
+        }
     }
 }

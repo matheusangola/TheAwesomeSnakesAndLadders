@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
+using Image = System.Drawing.Image;
 
 namespace TheAwesomeSnakesAndLadders.GameLogic
 {
-    internal class Board
+    public class Board
     {
         
         public int Size { get; set; }
@@ -22,47 +23,80 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
         public List<Ladder> LadderList { get; set; }
         public List<MysteryBox> MysteryBoxList { get; set; }
 
-        public List<Boolean> AvailableSpots { get; set; }
+        public List<Cell> CellList { get; set; }
+
+        public FormGame MyFormGame { get; set; }
+
+        public List<Player> PlayerList { get; set; }
+        public int FontSize;
 
 
 
-        public Board(string gameDificulty, FormGame formgame)
+        public Board(string gameDificulty, List<Player> playerList, FormGame formgame)
         {
+            MyFormGame = formgame;
+            PlayerList = playerList;
             if (gameDificulty == "Easy")
             {
-                Size = 5;
+                Size = 6;
                 SnakeQuantity = 4;
                 LadderQuantity = 4;
                 MysteryBoxQuantity = 4;
+                FontSize = 25;
             } else if (gameDificulty == "Medium")
             {
                 Size = 8;
                 SnakeQuantity = 7;
                 LadderQuantity = 7;
                 MysteryBoxQuantity = 7;
-            } else
+                FontSize = 20;
+            }
+            else
             {
-                Size = 12;
+                Size = 10;
                 SnakeQuantity = 11;
                 LadderQuantity = 11;
                 MysteryBoxQuantity = 11;
+                FontSize = 15;
             }
 
-            CreateAvailableSpots();
-            CreateBoardGrid(formgame);
-            CreateLadders(formgame);
-            CreateSnakes(formgame);
-            CreateMysteryBoxes(formgame);
-
+            CreateCells();
+            CreateBoardGrid();
+            CreateMysteryBoxes();
+            CreateLadders();
+            CreateSnakes();
+            CreatePlayerPin();
         }
 
-        private void CreateBoardGrid(FormGame formgame)
+        private void CreatePlayerPin()
+        {
+            int pinSize = 3 * FontSize;
+            for (int i = 0; i < PlayerList.Count; i++)
+            {
+                PictureBox pb = new PictureBox()
+                {
+                    Name = $"playerPin{i+1}",
+                    Image = Image.FromFile($"../../Images/Pin{PlayerList[i].Color}.png"),
+                    Size = new Size(pinSize, pinSize),
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                    Location = new Point(10+pinSize*i, 810),
+                    BackColor = Color.Transparent,
+                };
+                MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Add(pb);
+                pb.BackColor = Color.Transparent;
+            }
+           
+        }
+
+        private void CreateBoardGrid()
         {
             
             Panel boardPanel = new System.Windows.Forms.Panel()
             {
-                    Location = new Point(350, 100),
-                    Size = new System.Drawing.Size(800, 800),
+                //TO DO (350, 30)
+                    Location = new Point(10, 30),
+                    //(800, 900)
+                    Size = new System.Drawing.Size(600, 900),
                     Name = "boardPanel"
             };
             boardPanel.Controls.Clear();
@@ -85,64 +119,114 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                         cellNumber = totalCells - (row * Size + (Size - col - 1));
                     }
 
-                    // Create a new label with number for each cell
-                    Label cell = new Label
+                    // Create a new panel with number for each cell
+                    Panel newPanel = new Panel()
                     {
-                        Text = cellNumber.ToString(),
-                        TextAlign = ContentAlignment.MiddleCenter,
+                        Name = $"cell{cellNumber}",
                         Size = new Size(cellSize, cellSize),
                         BorderStyle = BorderStyle.FixedSingle,
-                        Name = $"cell{cellNumber}"
+                        Padding = new Padding(10,10,10,10)
                     };
+
+                    
 
                     // Alternating colors
                     //// Maybe we can add a choice for the user? ////
                     if ((row + col) % 2 == 0)
                     {
-                        cell.BackColor = Color.LightBlue;
+                        newPanel.BackColor = Color.LightBlue;
                     }
                     else
                     {
-                        cell.BackColor = Color.LightGreen;
+                        newPanel.BackColor = Color.LightGreen;
                     }
 
                     // Set location within boardPanel
-                    cell.Location = new Point(col * cellSize, row * cellSize);
+                    newPanel.Location = new Point(col * cellSize, row * cellSize);
 
                     // Add the cell to the boardPanel
-                    boardPanel.Controls.Add(cell);
+                    boardPanel.Controls.Add(newPanel);
+
+                    // Create a new label with number for each cell
+
+                    Label newLabel = new Label
+                    {
+                        Text = cellNumber.ToString(),
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        Font = new Font("Arial", FontSize),
+                        Size = new Size(cellSize, cellSize),
+                        BorderStyle = BorderStyle.FixedSingle,
+                        BackColor = Color.Transparent,
+                        Name = $"label{cellNumber}"
+                    };
+                   
+                    newPanel.Controls.Add(newLabel);
+
+
+
                 }
             }
-            formgame.Controls.Add(boardPanel);
+            MyFormGame.Controls.Add(boardPanel);
         }
 
-        private void CreateSnakes(FormGame formgame)
+        private void CreateSnakes()
         {
 
         }
 
-        private void CreateLadders(FormGame formgame)
-        {
 
+
+        private void CreateLadders()
+        {
+            Ladder newLadder = new Ladder(MyFormGame, this);
         }
 
-        private void CreateMysteryBoxes(FormGame formgame)
+        private void CreateMysteryBoxes()
         {
+            int mysteryBoxPosition;
             MysteryBoxList = new List<MysteryBox>();
             for (int i = 1; i <= MysteryBoxQuantity; i++)
             {
-                MysteryBox newMysteryBox = new MysteryBox(formgame, this);
+                MysteryBox newMysteryBox = new MysteryBox(MyFormGame, this);
                 MysteryBoxList.Add(newMysteryBox);
+                mysteryBoxPosition = newMysteryBox.Position;
+                CellList[mysteryBoxPosition-1].MyMysteryBox = newMysteryBox;
             }
         }
 
-        private void CreateAvailableSpots()
+        private void CreateCells()
         {
-            AvailableSpots = new List<bool>();
-            for (int i = 0; i < Size*Size; i++)
+            int newDeltaX = 1;
+            int newDeltaY = 0;
+            int newX = 0;
+            int newY = 0;
+            int row = 1;
+            CellList = new List<Cell>();
+            for (int i = 1; i <= Size*Size; i++)
             {
-                AvailableSpots.Add(true);
+                if (i % Size == 0)
+                {
+                    newDeltaX = 0;
+                    newDeltaY = 1;
+                    row++;
+                }
+                else if (row % 2 == 1)
+                {
+                    newDeltaX = 1;
+                    newDeltaY = 0;
+                } else if (row % 2 == 0)
+                {
+                    newDeltaX = -1;
+                    newDeltaY = 0;
+                }
+                Cell newCell = new Cell(true, newX, newY, newDeltaX, newDeltaY);
+                CellList.Add(newCell);
+                newX += newDeltaX;
+                newY += newDeltaY;
+                Console.WriteLine($"cellnumber = {i}, {newCell}");
             }
         }
+
+        
     }
 }

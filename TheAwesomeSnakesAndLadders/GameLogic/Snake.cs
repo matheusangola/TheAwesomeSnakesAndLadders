@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TheAwesomeSnakesAndLadders.GameLogic
 {
-    internal class Snake
+    public class Snake
     {
     }
 }

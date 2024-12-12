@@ -16,11 +16,15 @@ namespace TheAwesomeSnakesAndLadders
         private Board gameBoard;
         private Player player;
         private Controller myController;
-        public FormGame(int playerQuantity, string gameDificulty, List<Player> listPlayer)
+        public FormGame(int playerQuantity, string gameDificulty, List<Player> playerList)
         {
             InitializeComponent();
-            myController = new Controller(gameDificulty, listPlayer, this);
+            myController = new Controller(gameDificulty, playerList, this);
         }
 
+        private void FormGame_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
