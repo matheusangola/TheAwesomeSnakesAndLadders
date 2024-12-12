@@ -93,8 +93,10 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             
             Panel boardPanel = new System.Windows.Forms.Panel()
             {
-                    Location = new Point(350, 30),
-                    Size = new System.Drawing.Size(800, 900),
+                //TO DO (350, 30)
+                    Location = new Point(10, 30),
+                    //(800, 900)
+                    Size = new System.Drawing.Size(600, 900),
                     Name = "boardPanel"
             };
             boardPanel.Controls.Clear();
@@ -188,7 +190,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                 MysteryBox newMysteryBox = new MysteryBox(MyFormGame, this);
                 MysteryBoxList.Add(newMysteryBox);
                 mysteryBoxPosition = newMysteryBox.Position;
-                CellList[mysteryBoxPosition - 1].MyMysteryBox = newMysteryBox;
+                CellList[mysteryBoxPosition-1].MyMysteryBox = newMysteryBox;
             }
         }
 

@@ -17,6 +17,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
         {
             InitializePosition(formgame, board);
             GenerateRandomDestination(formgame);
+            Console.WriteLine(this);
         }
 
         private void InitializePosition(FormGame formgame, Board board)
@@ -60,10 +61,15 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             Destination = r.Next(Position - maxMovement, Position + maxMovement + 1);
             Label newLabel = new Label()
             {
-                Text = $"Destination: {Destination}"
+                Text = $"Dest: {Destination}"
             };
             formgame.Controls.Find("boardPanel", false)[0].Controls.Find($"cell{Position}", false)[0].Controls.Add(newLabel);
             newLabel.BringToFront();
+        }
+
+        public override string ToString()
+        {
+            return $"Dest: {Destination} Position: {Position}";
         }
 
 

@@ -29,7 +29,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             PlayersList = playersList;
             CurrentPlayer = PlayersList[0];
             CreateDicePanel();
-            CreatePlayerPanel();
+            //CreatePlayerPanel();
             GameBoard = new Board(GameDificulty, PlayersList, MyFormGame);
             
         }
@@ -83,8 +83,10 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             //Create Dice Panel
             Panel dicePanel = new System.Windows.Forms.Panel()
             {
-                Location = new Point(1200, 100),
-                Size = new System.Drawing.Size(300, 800),
+                // to do (1200, 100)
+                Location = new Point(610, 100),
+                // to do (300, 800)
+                Size = new System.Drawing.Size(200, 800),
                 Name = "dicePanel"
             };
             MyFormGame.Controls.Add(dicePanel);
@@ -166,10 +168,10 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             Console.WriteLine(DiceList[1].Value);
             selectedPictureBox2.Image = Image.FromFile($"../../Images/Dice{DiceList[1].Value}.png");
             await Task.Delay(100);
-            movePlayer();
+            await movePlayer();
         }
 
-        public async void movePlayer() 
+        public async Task movePlayer() 
         {
             //Sum Dice
             int remainingMovements = DiceList[0].Value + DiceList[1].Value;
@@ -183,6 +185,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                 PictureBox selectedPlayerPin = (PictureBox)MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Find($"playerPin{CurrentPlayer.Number}", false)[0];
                 int cellSize = MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Find($"cell1", false)[0].Size.Width;
                 int boardSize = MyFormGame.Controls.Find("boardPanel", false)[0].Size.Width;
+
                 if (CurrentPlayer.CellNumber == 0)
                 {
                     nextPlayerPosition = 1;
@@ -191,7 +194,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                     remainingMovements--;
                     selectedPlayerPin.Location = new Point(CurrentPlayer.X * cellSize, (boardSize - CurrentPlayer.Y * cellSize) - selectedPlayerPin.Size.Height);
                     selectedPlayerPin.BringToFront();
-                    await Task.Delay(500);
+                    await Task.Delay(100);
 
                 }
                 else
@@ -204,37 +207,70 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                 CurrentPlayer.X += GameBoard.CellList[CurrentPlayer.CellNumber - 1].NextCellDeltaX;
                 CurrentPlayer.Y += GameBoard.CellList[CurrentPlayer.CellNumber - 1].NextCellDeltaY;
                 
-                await Task.Delay(500);
+                await Task.Delay(200);
 
                 selectedPlayerPin.Location = new Point(CurrentPlayer.X*cellSize, (boardSize-CurrentPlayer.Y*cellSize)-selectedPlayerPin.Size.Height);
                 selectedPlayerPin.BringToFront();
 
-
                 remainingMovements--;
-
-
 
                 //Check if gameover
                 if (CheckGameOver())
                 {
                     break;
                 }
-
-
-
             }
             while (remainingMovements > 0);
+
             //////WORKING HERE //////
             // CheckMysteryBox
-            if (GameBoard.CellList[CurrentPlayer.CellNumber - 1].MyMysteryBox != null)
+            if (GameBoard.CellList[CurrentPlayer.CellNumber-1].MyMysteryBox != null)
             {
-
+                Console.WriteLine($"MysteryBox Triggered! Player CellNumber: {CurrentPlayer.CellNumber}");
+                var mysteryBoxDestination = GameBoard.CellList[CurrentPlayer.CellNumber - 1].MyMysteryBox.Destination;
+                await JumpToPosition(mysteryBoxDestination);
             }
 
             // Snake or Ladder movement
 
             //if not gameover next player's turn
             CurrentPlayer = GameBoard.PlayerList[CurrentPlayer.Number % GameBoard.PlayerList.Count];
+        }
+
+        public async Task JumpToPosition(int cellNumberDestination)
+        {
+            
+            //Move Player Pin
+            PictureBox selectedPlayerPin = (PictureBox)MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Find($"playerPin{CurrentPlayer.Number}", false)[0];
+            int cellSize = MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Find($"cell1", false)[0].Size.Width;
+            int boardSize = MyFormGame.Controls.Find("boardPanel", false)[0].Size.Width;
+
+            if(cellNumberDestination <= 0)
+            {
+                CurrentPlayer.CellNumber = 1;
+            } else if (cellNumberDestination > boardSize) {
+                CurrentPlayer.CellNumber = boardSize;
+            } else
+            {
+                CurrentPlayer.CellNumber = cellNumberDestination;
+            }
+
+            int sumX = 0;
+            int sumY = 0;
+
+            for (int i = 0; i < CurrentPlayer.CellNumber - 1; i++)
+            {
+                sumX += GameBoard.CellList[i].NextCellDeltaX;
+                sumY += GameBoard.CellList[i].NextCellDeltaY;
+            }
+            CurrentPlayer.X = sumX;
+            CurrentPlayer.Y = sumY;
+
+            await Task.Delay(100);
+
+            selectedPlayerPin.Location = new Point(CurrentPlayer.X * cellSize, (boardSize - CurrentPlayer.Y * cellSize) - selectedPlayerPin.Size.Height);
+            selectedPlayerPin.BringToFront();
+
         }
 
         public Boolean CheckGameOver()
