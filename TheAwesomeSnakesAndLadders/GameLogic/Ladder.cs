@@ -6,14 +6,15 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace TheAwesomeSnakesAndLadders.GameLogic
 {
     public class Ladder
     {
-        int Top;
-        int Bottom;
-        float LadderLength;
+        public int Top;
+        public int Bottom;
+        public float LadderLength;
 
         public Ladder(FormGame formgame, Board board)
         {
@@ -21,6 +22,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             InitializeTop(formgame, board);
             CalculateLadderLength(formgame, board);
             GenerateImage(formgame, board);
+            Console.WriteLine(this);
             
         }
 
@@ -65,32 +67,61 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
         private void CalculateLadderLength(FormGame formgame, Board board)
         {
+            int bottomX = 0;
+            int bottomY = 0;
+            int topX = 0;
+            int topY = 0;
+            for (int i = 0; i < Bottom-1; i++) {
+                bottomX += board.CellList[i].NextCellDeltaX;
+                bottomY += board.CellList[i].NextCellDeltaY;
+            }
+            for (int i = 0; i < Top-1; i++) {
+                topX += board.CellList[i].NextCellDeltaX;
+                topY += board.CellList[i].NextCellDeltaY;
+            }
 
         }
 
         private void GenerateImage(FormGame formgame, Board board)
         {
-            ///////criar novo painel OU renderizar painel de novo/////////
-            //PictureBox pb = new PictureBox()
-            //{
-            //    //Image = Image.FromFile("../../Images/Ladder.jpg"),
+
+            /////////criar novo painel OU renderizar painel de novo/////////
+            //PictureBox pb = new PictureBox() {
+            //    Image = new Bitmap("../../Images/Ladder1.png"),
             //    Size = new Size(500, 500),
             //    SizeMode = PictureBoxSizeMode.Zoom,
             //    Location = new Point(0, 0),
+            //    BackColor = Color.Transparent
             //};
             //pb.Paint += OnPaint;
             //formgame.Controls.Find("boardPanel", false)[0].Controls.Add(pb);
             //pb.BringToFront();
+            //pb.Invalidate();
+            //pb.Refresh();
+
+
+
+            Panel selectedBoardPanel = (Panel)formgame.Controls.Find("boardPanel", false)[0];
+            selectedBoardPanel.Paint += OnPaint;
+
+            selectedBoardPanel.Invalidate();
+            selectedBoardPanel.Refresh();
         }
+
 
         protected void OnPaint(object sender, PaintEventArgs e)
         {
-            var ladder = new Bitmap("../../Images/Ladder.jpg");
+            var ladder = new Bitmap("../../Images/Ladder1.png");
             e.Graphics.RotateTransform(20.0F);
-
-            e.Graphics.DrawImage(ladder, 160, 160, 150, 150);
+            e.Graphics.DrawImage(ladder, 800, 400, 150, 150);
+            e.Graphics.Save();
+            Console.WriteLine("OnPaint Triggered");
         }
 
 
+        public override string ToString()
+        {
+            return $"[Ladder] Top: {Top}; Bottom: {Bottom}; LadderLength: {LadderLength}";
+        } 
     }
 }

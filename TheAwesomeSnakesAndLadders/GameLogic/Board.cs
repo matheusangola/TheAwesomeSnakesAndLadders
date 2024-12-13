@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
 using Image = System.Drawing.Image;
+using System.Drawing.Imaging;
 
 namespace TheAwesomeSnakesAndLadders.GameLogic
 {
@@ -66,6 +67,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             CreateLadders();
             CreateSnakes();
             CreatePlayerPin();
+
         }
 
         private void CreatePlayerPin()
@@ -132,11 +134,13 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                     //// Maybe we can add a choice for the user? ////
                     if ((row + col) % 2 == 0)
                     {
-                        newPanel.BackColor = Color.LightBlue;
+                        //lightblue
+                        newPanel.BackColor = Color.FromArgb(80,0,0,100);
                     }
                     else
                     {
-                        newPanel.BackColor = Color.LightGreen;
+                        //lightgreen
+                        newPanel.BackColor = Color.FromArgb(80,0,100,0);
                     }
 
                     // Set location within boardPanel
@@ -161,10 +165,18 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                     newPanel.Controls.Add(newLabel);
 
 
-
                 }
             }
             MyFormGame.Controls.Add(boardPanel);
+
+
+            int width = boardPanel.Size.Width;
+            int height = boardPanel.Size.Height;
+
+            Bitmap bm = new Bitmap(width, height);
+            boardPanel.DrawToBitmap(bm, new Rectangle(0, 0, width, height));
+
+            bm.Save($"../../Images/BoardPanel.png", ImageFormat.Bmp);
         }
 
         private void CreateSnakes()
@@ -176,8 +188,16 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
         private void CreateLadders()
         {
-            Ladder newLadder = new Ladder(MyFormGame, this);
-        }
+            int ladderBottom;
+            LadderList = new List<Ladder>();
+            for (int i = 1; i <= LadderQuantity; i++)
+            {
+                Ladder newLadder = new Ladder(MyFormGame, this);
+                LadderList.Add(newLadder);
+                ladderBottom = newLadder.Bottom;
+                CellList[ladderBottom-1].MyLadder = newLadder;
+            }
+        }        
 
         private void CreateMysteryBoxes()
         {
@@ -224,7 +244,6 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                 Console.WriteLine($"cellnumber = {i}, {newCell}");
             }
         }
-
         
     }
 }

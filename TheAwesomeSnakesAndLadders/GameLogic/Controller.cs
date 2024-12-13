@@ -31,6 +31,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             CreateDicePanel();
             CreatePlayerPanel();
             GameBoard = new Board(GameDificulty, PlayersList, MyFormGame);
+
             
         }
 
@@ -215,6 +216,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
                 selectedPlayerPin.Location = new Point(CurrentPlayer.X*cellSize, (boardSize-CurrentPlayer.Y*cellSize)-selectedPlayerPin.Size.Height);
                 selectedPlayerPin.BringToFront();
+                selectedPlayerPin.Refresh();
 
                 Console.WriteLine($"Player new stats! Player: {CurrentPlayer}");
 
