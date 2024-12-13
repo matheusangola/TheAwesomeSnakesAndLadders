@@ -93,10 +93,8 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             
             Panel boardPanel = new System.Windows.Forms.Panel()
             {
-                //TO DO (350, 30)
-                    Location = new Point(10, 30),
-                    //(800, 900)
-                    Size = new System.Drawing.Size(600, 900),
+                    Location = new Point(350, 30),
+                    Size = new System.Drawing.Size(800, 900),
                     Name = "boardPanel"
             };
             boardPanel.Controls.Clear();

@@ -28,7 +28,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
         public override string ToString()
         {
-            return $"{Name} ({Color})";
+            return $"[Player] Name: {Name}; Number: {Number}; Color: {Color}; CellNumber: {CellNumber}; X: {X}; Y: {Y}";
         }
     }
 }

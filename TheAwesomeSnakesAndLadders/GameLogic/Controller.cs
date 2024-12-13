@@ -29,7 +29,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             PlayersList = playersList;
             CurrentPlayer = PlayersList[0];
             CreateDicePanel();
-            //CreatePlayerPanel();
+            CreatePlayerPanel();
             GameBoard = new Board(GameDificulty, PlayersList, MyFormGame);
             
         }
@@ -66,8 +66,8 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                 Label newLabel = new Label()
                 {
                     Name = $"labelPlayerName{i}",
-                    Text = $"{player}",
-                    Font = new Font("Arial", 24),
+                    Text = $"Player {player.Color}:\n{player.Name}",
+                    Font = new Font("Arial", 14),
                     Size = new Size(subPanelWidth, labelHeight),
                     //SizeMode = PictureBoxSizeMode.Zoom,
                     Location = new Point(10, 10),
@@ -84,9 +84,9 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             Panel dicePanel = new System.Windows.Forms.Panel()
             {
                 // to do (1200, 100)
-                Location = new Point(610, 100),
+                Location = new Point(1200, 100),
                 // to do (300, 800)
-                Size = new System.Drawing.Size(200, 800),
+                Size = new System.Drawing.Size(300, 800),
                 Name = "dicePanel"
             };
             MyFormGame.Controls.Add(dicePanel);
@@ -114,12 +114,12 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             }
 
             // Create PlayerTurn Label
-            int labelHeight = 40;
+            int labelHeight = 60;
             Label newLabel = new Label()
             {
                 Name = "labelPlayerTurn",
-                Text = $"{CurrentPlayer.Name}'s turn",
-                Font = new Font("Arial", 24),
+                Text = $"{CurrentPlayer.Color}'s turn\n({CurrentPlayer.Name})",
+                Font = new Font("Arial", 14),
                 Size = new Size(pictureBoxSize, labelHeight),
                 //SizeMode = PictureBoxSizeMode.Zoom,
                 Location = new Point(10, verticalPosition),
@@ -181,6 +181,9 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             int nextPlayerPosition;
             do
             {
+                Console.WriteLine($"\nremainingMovements: {remainingMovements}");
+                Console.WriteLine($"Player To be Moved! Player: {CurrentPlayer}");
+
                 //Move Player Pin
                 PictureBox selectedPlayerPin = (PictureBox)MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Find($"playerPin{CurrentPlayer.Number}", false)[0];
                 int cellSize = MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Find($"cell1", false)[0].Size.Width;
@@ -191,7 +194,6 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                     nextPlayerPosition = 1;
                     CurrentPlayer.X = 0;
                     CurrentPlayer.Y = 0;
-                    remainingMovements--;
                     selectedPlayerPin.Location = new Point(CurrentPlayer.X * cellSize, (boardSize - CurrentPlayer.Y * cellSize) - selectedPlayerPin.Size.Height);
                     selectedPlayerPin.BringToFront();
                     await Task.Delay(100);
@@ -202,22 +204,26 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                     currentPlayerPosition = CurrentPlayer.CellNumber;
 
                     nextPlayerPosition = currentPlayerPosition + 1;
+
+                    CurrentPlayer.X += GameBoard.CellList[CurrentPlayer.CellNumber - 1].NextCellDeltaX;
+                    CurrentPlayer.Y += GameBoard.CellList[CurrentPlayer.CellNumber - 1].NextCellDeltaY;
                 }
                 CurrentPlayer.CellNumber = nextPlayerPosition;
-                CurrentPlayer.X += GameBoard.CellList[CurrentPlayer.CellNumber - 1].NextCellDeltaX;
-                CurrentPlayer.Y += GameBoard.CellList[CurrentPlayer.CellNumber - 1].NextCellDeltaY;
+                
                 
                 await Task.Delay(200);
 
                 selectedPlayerPin.Location = new Point(CurrentPlayer.X*cellSize, (boardSize-CurrentPlayer.Y*cellSize)-selectedPlayerPin.Size.Height);
                 selectedPlayerPin.BringToFront();
 
+                Console.WriteLine($"Player new stats! Player: {CurrentPlayer}");
+
                 remainingMovements--;
 
                 //Check if gameover
                 if (CheckGameOver())
                 {
-                    break;
+                    return;
                 }
             }
             while (remainingMovements > 0);
@@ -226,7 +232,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             // CheckMysteryBox
             if (GameBoard.CellList[CurrentPlayer.CellNumber-1].MyMysteryBox != null)
             {
-                Console.WriteLine($"MysteryBox Triggered! Player CellNumber: {CurrentPlayer.CellNumber}");
+                Console.WriteLine($"MysteryBox Triggered! Current Player: {CurrentPlayer}");
                 var mysteryBoxDestination = GameBoard.CellList[CurrentPlayer.CellNumber - 1].MyMysteryBox.Destination;
                 await JumpToPosition(mysteryBoxDestination);
             }
@@ -235,6 +241,10 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
             //if not gameover next player's turn
             CurrentPlayer = GameBoard.PlayerList[CurrentPlayer.Number % GameBoard.PlayerList.Count];
+
+            //Update Current Player Label (Above Button)
+            Label selectedLabelPlayerTurn = (Label)MyFormGame.Controls.Find("dicePanel", false)[0].Controls.Find("labelPlayerTurn", false)[0];
+            selectedLabelPlayerTurn.Text = $"{CurrentPlayer.Color}'s turn\n({CurrentPlayer.Name})";
         }
 
         public async Task JumpToPosition(int cellNumberDestination)

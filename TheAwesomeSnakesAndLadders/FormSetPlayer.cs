@@ -55,7 +55,7 @@ namespace TheAwesomeSnakesAndLadders
                 this.Controls.Add(playerLabel);
                 var playerTextbox = new System.Windows.Forms.TextBox()
                 {
-                    Text = $"Player {i+1} name",
+                    Text = $"Player {i+1}",
                     Location = new Point(270, 115+30*i),
                     Size = new System.Drawing.Size(140, 15),
                     Name = $"textBox{i+1}"
