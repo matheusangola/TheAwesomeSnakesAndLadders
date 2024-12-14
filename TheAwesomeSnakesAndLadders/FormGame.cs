@@ -19,7 +19,9 @@ namespace TheAwesomeSnakesAndLadders
         public FormGame(int playerQuantity, string gameDificulty, List<Player> playerList)
         {
             InitializeComponent();
+            this.SuspendLayout();
             myController = new Controller(gameDificulty, playerList, this);
+            this.ResumeLayout(false);
         }
 
         private void FormGame_Load(object sender, EventArgs e)

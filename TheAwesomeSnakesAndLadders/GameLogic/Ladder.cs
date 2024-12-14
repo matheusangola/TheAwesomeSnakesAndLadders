@@ -14,14 +14,18 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
     {
         public int Top;
         public int Bottom;
-        public float LadderLength;
+        public double LadderLength;
+        public double LadderAngle;
+        public int BottomX;
+        public int BottomY;
+        public int TopX;
+        public int TopY;
 
         public Ladder(FormGame formgame, Board board)
         {
             InitializeBottom(formgame, board);
             InitializeTop(formgame, board);
             CalculateLadderLength(formgame, board);
-            GenerateImage(formgame, board);
             Console.WriteLine(this);
             
         }
@@ -80,48 +84,26 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                 topY += board.CellList[i].NextCellDeltaY;
             }
 
-        }
+            BottomX = bottomX;
+            BottomY = bottomY;
+            TopX = topX;
+            TopY = topY;
 
-        private void GenerateImage(FormGame formgame, Board board)
-        {
+            double deltaX = (double)TopX - (double)BottomX;
+            double deltaY = (double)TopY - (double)BottomY;
 
-            /////////criar novo painel OU renderizar painel de novo/////////
-            //PictureBox pb = new PictureBox() {
-            //    Image = new Bitmap("../../Images/Ladder1.png"),
-            //    Size = new Size(500, 500),
-            //    SizeMode = PictureBoxSizeMode.Zoom,
-            //    Location = new Point(0, 0),
-            //    BackColor = Color.Transparent
-            //};
-            //pb.Paint += OnPaint;
-            //formgame.Controls.Find("boardPanel", false)[0].Controls.Add(pb);
-            //pb.BringToFront();
-            //pb.Invalidate();
-            //pb.Refresh();
+            LadderLength = Math.Pow(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2), 0.5);
 
-
-
-            Panel selectedBoardPanel = (Panel)formgame.Controls.Find("boardPanel", false)[0];
-            selectedBoardPanel.Paint += OnPaint;
-
-            selectedBoardPanel.Invalidate();
-            selectedBoardPanel.Refresh();
+            LadderAngle = Math.Atan2(deltaX, deltaY)*180/Math.PI;
         }
 
 
-        protected void OnPaint(object sender, PaintEventArgs e)
-        {
-            var ladder = new Bitmap("../../Images/Ladder1.png");
-            e.Graphics.RotateTransform(20.0F);
-            e.Graphics.DrawImage(ladder, 800, 400, 150, 150);
-            e.Graphics.Save();
-            Console.WriteLine("OnPaint Triggered");
-        }
+
 
 
         public override string ToString()
         {
-            return $"[Ladder] Top: {Top}; Bottom: {Bottom}; LadderLength: {LadderLength}";
+            return $"[Ladder] Top: {Top}; Bottom: {Bottom}; LadderLength: {LadderLength}; LadderAngle: {LadderAngle}; BottomX: {BottomX}; BottomY: {BottomY}; TopX: {TopX}; TopY: {TopY}";
         } 
     }
 }

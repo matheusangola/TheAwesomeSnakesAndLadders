@@ -40,9 +40,9 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             if (gameDificulty == "Easy")
             {
                 Size = 6;
-                SnakeQuantity = 4;
-                LadderQuantity = 4;
-                MysteryBoxQuantity = 4;
+                SnakeQuantity = 5;
+                LadderQuantity = 5;
+                MysteryBoxQuantity = 5;
                 FontSize = 25;
             } else if (gameDificulty == "Medium")
             {
@@ -61,12 +61,12 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                 FontSize = 15;
             }
 
-            CreateCells();
+            CreateListCells();
             CreateBoardGrid();
             CreateMysteryBoxes();
-            CreateLadders();
             CreateSnakes();
             CreatePlayerPin();
+            CreateLadders();
 
         }
 
@@ -168,16 +168,9 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                 }
             }
             MyFormGame.Controls.Add(boardPanel);
-
-
-            int width = boardPanel.Size.Width;
-            int height = boardPanel.Size.Height;
-
-            Bitmap bm = new Bitmap(width, height);
-            boardPanel.DrawToBitmap(bm, new Rectangle(0, 0, width, height));
-
-            bm.Save($"../../Images/BoardPanel.png", ImageFormat.Bmp);
         }
+
+
 
         private void CreateSnakes()
         {
@@ -197,7 +190,12 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                 ladderBottom = newLadder.Bottom;
                 CellList[ladderBottom-1].MyLadder = newLadder;
             }
-        }        
+
+            Panel selectedBoardPanel = (Panel)MyFormGame.Controls.Find("boardPanel", false)[0];
+            selectedBoardPanel.Paint += PaintLadder;
+        }
+
+
 
         private void CreateMysteryBoxes()
         {
@@ -209,10 +207,11 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                 MysteryBoxList.Add(newMysteryBox);
                 mysteryBoxPosition = newMysteryBox.Position;
                 CellList[mysteryBoxPosition-1].MyMysteryBox = newMysteryBox;
+
             }
         }
 
-        private void CreateCells()
+        private void CreateListCells()
         {
             int newDeltaX = 1;
             int newDeltaY = 0;
@@ -245,5 +244,98 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             }
         }
         
+        
+        protected void PaintLadder(object sender, PaintEventArgs e)
+        {
+            //for(int i = 0; i < LadderList.Count; i++) {
+                
+            //    double ladderLength = LadderList[i].LadderLength;
+            //    Bitmap ladder;
+
+            //    if (ladderLength > 0 && ladderLength <= 1)
+            //    {
+            //        ladder = new Bitmap("../../Images/Ladder1.png");
+            //    }
+            //    else if (ladderLength > 1 && ladderLength <= 2)
+            //    {
+            //         ladder = new Bitmap("../../Images/Ladder2.png");
+            //    }
+            //    else if (ladderLength > 2 && ladderLength <= 3)
+            //    {
+            //         ladder = new Bitmap("../../Images/Ladder3.png");
+            //    }
+            //    else if (ladderLength > 3 && ladderLength <= 4)
+            //    {
+            //         ladder = new Bitmap("../../Images/Ladder4.png");
+            //    }
+            //    else if (ladderLength > 4 && ladderLength <= 5)
+            //    {
+            //         ladder = new Bitmap("../../Images/Ladder5.png");
+            //    }
+            //    else if (ladderLength > 5 && ladderLength <= 6)
+            //    {
+            //         ladder = new Bitmap("../../Images/Ladder6.png");
+            //    }
+            //    else if (ladderLength > 6 && ladderLength <= 7)
+            //    {
+            //         ladder = new Bitmap("../../Images/Ladder7.png");
+            //    }
+            //    else if (ladderLength > 7 && ladderLength <= 8)
+            //    {
+            //         ladder = new Bitmap("../../Images/Ladder8.png");
+            //    }
+            //    else if (ladderLength > 8)
+            //    {
+            //         ladder = new Bitmap("../../Images/Ladder9.png");
+            //    }
+            //    else
+            //    {
+            //         throw new Exception("[ERROR] Invalid ladderLength");
+            //    }
+
+                
+            //    int cellSize = MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Find($"cell1", false)[0].Size.Width;
+            //    int boardSize = MyFormGame.Controls.Find("boardPanel", false)[0].Size.Width;
+
+            //    int ladderBottomX = LadderList[i].BottomX * cellSize + cellSize/2;
+            //    int ladderBottomY = LadderList[i].BottomY * cellSize + cellSize/2;
+                
+            //    e.Graphics.RotateTransform((float)LadderList[i].LadderAngle);
+            //    e.Graphics.TranslateTransform(-ladderBottomX, +(boardSize-ladderBottomY));
+            //    //e.Graphics.DrawImage(ladder, ladderBottomX, boardSize-ladderBottomY, 300, 300);
+            //    e.Graphics.DrawImage(ladder, -600, -600, 600, 600);
+                
+            //    ladder.Dispose();
+            //    e.Graphics.TranslateTransform(ladderBottomX, -(boardSize-ladderBottomY));
+            //    e.Graphics.RotateTransform( - (float)LadderList[i].LadderAngle);
+
+                
+            double ladderLength = 3;
+            Bitmap ladder;
+
+            ladder = new Bitmap("../../Images/Ladder4.png");
+                
+            int cellSize = MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Find($"cell1", false)[0].Size.Width;
+            int boardSize = MyFormGame.Controls.Find("boardPanel", false)[0].Size.Width;
+
+            int ladderBottomX = 3/2 * cellSize;
+            int ladderBottomY = 3/2 * cellSize;
+                
+            e.Graphics.TranslateTransform(+ladderBottomX, -(ladderBottomY));
+            e.Graphics.RotateTransform((float)33.69);
+            //e.Graphics.DrawImage(ladder, ladderBottomX, boardSize-ladderBottomY, 300, 300);
+            e.Graphics.DrawImage(ladder, 0, 0);
+                
+            ladder.Dispose();
+            e.Graphics.RotateTransform( - (float)33.69);
+            e.Graphics.TranslateTransform(-ladderBottomX, +(ladderBottomY));
+
+
+
+
+
+            Console.WriteLine("PaintLadder Triggered");
+        }
+
     }
 }
