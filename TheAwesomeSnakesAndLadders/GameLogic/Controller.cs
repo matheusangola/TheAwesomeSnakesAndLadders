@@ -222,7 +222,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             }
             while (remainingMovements > 0);
 
-            //////WORKING HERE //////
+            //WORKING HERE //
             // CheckMysteryBox
             if (GameBoard.CellList[CurrentPlayer.CellNumber-1].MyMysteryBox != null)
             {
