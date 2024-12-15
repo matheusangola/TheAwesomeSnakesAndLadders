@@ -243,6 +243,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
             //////WORKING HERE //////
             // Check MysteryBox
+
             if (GameBoard.CellList[CurrentPlayer.CellNumber-1].MyMysteryBox != null)
             {
                 Console.WriteLine($"MysteryBox Triggered! Current Player: {CurrentPlayer}");
