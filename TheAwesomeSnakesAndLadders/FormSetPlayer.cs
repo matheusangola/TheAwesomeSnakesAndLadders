@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using TheAwesomeSnakesAndLadders.GameLogic;
 
@@ -16,17 +11,16 @@ namespace TheAwesomeSnakesAndLadders
         int PlayerQuantity;
         string GameDificulty;
         List<Player> PlayerList;
-        List<String> ColorList;
+        List<string> PinColorList;
         private void submitButtonClicked(object sender, EventArgs e)
         {
             for (int i = 0; i < PlayerQuantity; i++)
             {
                 TextBox selectedTextbox = (TextBox)this.Controls.Find($"textbox{i + 1}", false)[0];                {
-                    Player p = new Player(selectedTextbox.Text, ColorList[i], i+1);
+                    Player p = new Player(selectedTextbox.Text, PinColorList[i], i+1, 0);
                     PlayerList.Add(p);
                     Console.WriteLine($"player {p}");
                 }
-                
             }
             var nextForm = new FormGame(PlayerQuantity, GameDificulty, PlayerList);
             nextForm.Show();
@@ -40,14 +34,14 @@ namespace TheAwesomeSnakesAndLadders
             PlayerQuantity = playerQuantityInput;
             GameDificulty = gameDificultyInput;
             PlayerList = new List<Player>();
-            ColorList = new List<string>() { "Blue", "Red", "Green", "Yellow" };
+            PinColorList = new List<string>() { "Blue", "Red", "Green", "Yellow" };
 
             InitializeComponent();
             for (int i = 0; i < PlayerQuantity; i++)
             {
                 var playerLabel = new System.Windows.Forms.Label()
                 {
-                    Text = $"Player {i + 1} name {ColorList[i]}: ",
+                    Text = $"Player {i + 1} name {PinColorList[i]}: ",
                     Location = new Point(180, 120 + 30 * i),
                     Size = new System.Drawing.Size(80, 15),
                     Name = $"label{i + 1}"
@@ -55,7 +49,7 @@ namespace TheAwesomeSnakesAndLadders
                 this.Controls.Add(playerLabel);
                 var playerTextbox = new System.Windows.Forms.TextBox()
                 {
-                    Text = $"Player {i+1} name",
+                    Text = $"Player {i+1}",
                     Location = new Point(270, 115+30*i),
                     Size = new System.Drawing.Size(140, 15),
                     Name = $"textBox{i+1}"
