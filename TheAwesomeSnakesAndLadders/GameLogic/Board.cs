@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
-using System.Xml.Linq;
 using Image = System.Drawing.Image;
-using System.Drawing.Imaging;
+
 
 namespace TheAwesomeSnakesAndLadders.GameLogic
 {
@@ -30,69 +26,89 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
         public List<Player> PlayerList { get; set; }
         public int FontSize;
-
+        public List<string> SnakeColorList;
+        public List<string> LadderColorList;
 
 
         public Board(string gameDificulty, List<Player> playerList, FormGame formgame)
         {
+            SnakeColorList = new List<string>() { "Green", "Red", "Blue", "Yellow", "Pink", "Brown", "Purple", "Orange", "Beige" };
+            LadderColorList = new List<string>() { "Brown", "Blue", "Red", "Yellow", "Green", "Orange", "Purple", "Gray", "Pink" };
+
             MyFormGame = formgame;
             PlayerList = playerList;
             if (gameDificulty == "Easy")
             {
                 Size = 6;
-                SnakeQuantity = 5;
-                LadderQuantity = 5;
-                MysteryBoxQuantity = 5;
-                FontSize = 25;
+                SnakeQuantity = 4;
+                LadderQuantity = 4;
+                MysteryBoxQuantity = 4;
+                FontSize = 20;
             } else if (gameDificulty == "Medium")
             {
                 Size = 8;
-                SnakeQuantity = 7;
-                LadderQuantity = 7;
-                MysteryBoxQuantity = 7;
-                FontSize = 20;
+                SnakeQuantity = 6;
+                LadderQuantity = 6;
+                MysteryBoxQuantity = 6;
+                FontSize = 15;
             }
             else
             {
                 Size = 10;
-                SnakeQuantity = 11;
-                LadderQuantity = 11;
-                MysteryBoxQuantity = 11;
-                FontSize = 15;
+                SnakeQuantity = 8;
+                LadderQuantity = 8;
+                MysteryBoxQuantity = 8;
+                FontSize = 10;
             }
 
             CreateListCells();
             CreateBoardGrid();
             CreateMysteryBoxes();
+            CreateLadders();
             CreateSnakes();
             CreatePlayerPin();
-            CreateLadders();
+            AdjustPlayerPinDisplayOffsetX();
 
         }
 
-        private void CreatePlayerPin()
+
+        private void CreateListCells()
         {
-            int pinSize = 3 * FontSize;
-            for (int i = 0; i < PlayerList.Count; i++)
+            int newDeltaX = 1;
+            int newDeltaY = 0;
+            int newX = 0;
+            int newY = 0;
+            int row = 1;
+            CellList = new List<Cell>();
+            for (int i = 1; i <= Size*Size; i++)
             {
-                PictureBox pb = new PictureBox()
+                if (i % Size == 0)
                 {
-                    Name = $"playerPin{i+1}",
-                    Image = Image.FromFile($"../../Images/Pin{PlayerList[i].Color}.png"),
-                    Size = new Size(pinSize, pinSize),
-                    SizeMode = PictureBoxSizeMode.Zoom,
-                    Location = new Point(10+pinSize*i, 810),
-                    BackColor = Color.Transparent,
-                };
-                MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Add(pb);
-                pb.BackColor = Color.Transparent;
+                    newDeltaX = 0;
+                    newDeltaY = 1;
+                    row++;
+                }
+                else if (row % 2 == 1)
+                {
+                    newDeltaX = 1;
+                    newDeltaY = 0;
+                } else if (row % 2 == 0)
+                {
+                    newDeltaX = -1;
+                    newDeltaY = 0;
+                }
+                Cell newCell = new Cell(true, newX, newY, newDeltaX, newDeltaY);
+                CellList.Add(newCell);
+                newX += newDeltaX;
+                newY += newDeltaY;
+                Console.WriteLine($"cellnumber = {i}, {newCell}");
             }
-           
         }
+
+        
 
         private void CreateBoardGrid()
         {
-            
             Panel boardPanel = new System.Windows.Forms.Panel()
             {
                     Location = new Point(350, 30),
@@ -128,20 +144,25 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                         Padding = new Padding(10,10,10,10)
                     };
 
-                    
 
                     // Alternating colors
                     //// Maybe we can add a choice for the user? ////
-                    if ((row + col) % 2 == 0)
+                    if ((row + col) % 3 == 0)
                     {
                         //lightblue
-                        newPanel.BackColor = Color.FromArgb(80,0,0,100);
+                        newPanel.BackColor = Color.FromArgb(255, 114, 191, 120);
                     }
-                    else
+                    else if ((row + col) % 3 == 1)
                     {
-                        //lightgreen
-                        newPanel.BackColor = Color.FromArgb(80,0,100,0);
+                        //lightblue
+                        newPanel.BackColor = Color.FromArgb(255, 160, 214, 131);
                     }
+                    else if ((row + col) % 3 == 2)
+                    {
+                        //lightblue
+                        newPanel.BackColor = Color.FromArgb(255, 211, 238, 152);
+                    }
+                    
 
                     // Set location within boardPanel
                     newPanel.Location = new Point(col * cellSize, row * cellSize);
@@ -156,45 +177,18 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                         Text = cellNumber.ToString(),
                         TextAlign = ContentAlignment.MiddleCenter,
                         Font = new Font("Arial", FontSize),
-                        Size = new Size(cellSize, cellSize),
-                        BorderStyle = BorderStyle.FixedSingle,
-                        BackColor = Color.Transparent,
+                        Size = new Size(FontSize*32/10, FontSize*3/2),
+                        BorderStyle = BorderStyle.None,
+                        BackColor = Color.FromArgb(100, Color.Gray),
                         Name = $"label{cellNumber}"
                     };
-                   
+                    newLabel.Location = new Point(0, 0);
+
                     newPanel.Controls.Add(newLabel);
-
-
                 }
             }
             MyFormGame.Controls.Add(boardPanel);
         }
-
-
-
-        private void CreateSnakes()
-        {
-
-        }
-
-
-
-        private void CreateLadders()
-        {
-            int ladderBottom;
-            LadderList = new List<Ladder>();
-            for (int i = 1; i <= LadderQuantity; i++)
-            {
-                Ladder newLadder = new Ladder(MyFormGame, this);
-                LadderList.Add(newLadder);
-                ladderBottom = newLadder.Bottom;
-                CellList[ladderBottom-1].MyLadder = newLadder;
-            }
-
-            Panel selectedBoardPanel = (Panel)MyFormGame.Controls.Find("boardPanel", false)[0];
-            selectedBoardPanel.Paint += PaintLadder;
-        }
-
 
 
         private void CreateMysteryBoxes()
@@ -207,134 +201,69 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                 MysteryBoxList.Add(newMysteryBox);
                 mysteryBoxPosition = newMysteryBox.Position;
                 CellList[mysteryBoxPosition-1].MyMysteryBox = newMysteryBox;
-
             }
         }
 
-        private void CreateListCells()
+
+        private async void CreateLadders()
         {
-            int newDeltaX = 1;
-            int newDeltaY = 0;
-            int newX = 0;
-            int newY = 0;
-            int row = 1;
-            CellList = new List<Cell>();
-            for (int i = 1; i <= Size*Size; i++)
+            int ladderBottom;
+            LadderList = new List<Ladder>();
+            for (int i = 1; i <= LadderQuantity; i++)
             {
-                if (i % Size == 0)
-                {
-                    newDeltaX = 0;
-                    newDeltaY = 1;
-                    row++;
-                }
-                else if (row % 2 == 1)
-                {
-                    newDeltaX = 1;
-                    newDeltaY = 0;
-                } else if (row % 2 == 0)
-                {
-                    newDeltaX = -1;
-                    newDeltaY = 0;
-                }
-                Cell newCell = new Cell(true, newX, newY, newDeltaX, newDeltaY);
-                CellList.Add(newCell);
-                newX += newDeltaX;
-                newY += newDeltaY;
-                Console.WriteLine($"cellnumber = {i}, {newCell}");
+                await Task.Delay(50);
+                Ladder newLadder = new Ladder(LadderColorList[i-1], MyFormGame, this);
+                LadderList.Add(newLadder);
+                ladderBottom = newLadder.Bottom;
+                CellList[ladderBottom-1].MyLadder = newLadder;
             }
         }
-        
-        
-        protected void PaintLadder(object sender, PaintEventArgs e)
+
+
+        private async void CreateSnakes()
         {
-            //for(int i = 0; i < LadderList.Count; i++) {
-                
-            //    double ladderLength = LadderList[i].LadderLength;
-            //    Bitmap ladder;
-
-            //    if (ladderLength > 0 && ladderLength <= 1)
-            //    {
-            //        ladder = new Bitmap("../../Images/Ladder1.png");
-            //    }
-            //    else if (ladderLength > 1 && ladderLength <= 2)
-            //    {
-            //         ladder = new Bitmap("../../Images/Ladder2.png");
-            //    }
-            //    else if (ladderLength > 2 && ladderLength <= 3)
-            //    {
-            //         ladder = new Bitmap("../../Images/Ladder3.png");
-            //    }
-            //    else if (ladderLength > 3 && ladderLength <= 4)
-            //    {
-            //         ladder = new Bitmap("../../Images/Ladder4.png");
-            //    }
-            //    else if (ladderLength > 4 && ladderLength <= 5)
-            //    {
-            //         ladder = new Bitmap("../../Images/Ladder5.png");
-            //    }
-            //    else if (ladderLength > 5 && ladderLength <= 6)
-            //    {
-            //         ladder = new Bitmap("../../Images/Ladder6.png");
-            //    }
-            //    else if (ladderLength > 6 && ladderLength <= 7)
-            //    {
-            //         ladder = new Bitmap("../../Images/Ladder7.png");
-            //    }
-            //    else if (ladderLength > 7 && ladderLength <= 8)
-            //    {
-            //         ladder = new Bitmap("../../Images/Ladder8.png");
-            //    }
-            //    else if (ladderLength > 8)
-            //    {
-            //         ladder = new Bitmap("../../Images/Ladder9.png");
-            //    }
-            //    else
-            //    {
-            //         throw new Exception("[ERROR] Invalid ladderLength");
-            //    }
-
-                
-            //    int cellSize = MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Find($"cell1", false)[0].Size.Width;
-            //    int boardSize = MyFormGame.Controls.Find("boardPanel", false)[0].Size.Width;
-
-            //    int ladderBottomX = LadderList[i].BottomX * cellSize + cellSize/2;
-            //    int ladderBottomY = LadderList[i].BottomY * cellSize + cellSize/2;
-                
-            //    e.Graphics.RotateTransform((float)LadderList[i].LadderAngle);
-            //    e.Graphics.TranslateTransform(-ladderBottomX, +(boardSize-ladderBottomY));
-            //    //e.Graphics.DrawImage(ladder, ladderBottomX, boardSize-ladderBottomY, 300, 300);
-            //    e.Graphics.DrawImage(ladder, -600, -600, 600, 600);
-                
-            //    ladder.Dispose();
-            //    e.Graphics.TranslateTransform(ladderBottomX, -(boardSize-ladderBottomY));
-            //    e.Graphics.RotateTransform( - (float)LadderList[i].LadderAngle);
-
-                
-            double ladderLength = 3;
-            Bitmap ladder;
-
-            ladder = new Bitmap("../../Images/Ladder4.png");
-                
-            int cellSize = MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Find($"cell1", false)[0].Size.Width;
-            int boardSize = MyFormGame.Controls.Find("boardPanel", false)[0].Size.Width;
-
-            int ladderBottomX = 3/2 * cellSize;
-            int ladderBottomY = 3/2 * cellSize;
-                
-            e.Graphics.TranslateTransform(+ladderBottomX, -(ladderBottomY));
-            e.Graphics.RotateTransform((float)33.69);
-            //e.Graphics.DrawImage(ladder, ladderBottomX, boardSize-ladderBottomY, 300, 300);
-            e.Graphics.DrawImage(ladder, 0, 0);
-                
-            ladder.Dispose();
-            e.Graphics.RotateTransform( - (float)33.69);
-            e.Graphics.TranslateTransform(-ladderBottomX, +(ladderBottomY));
+            int snakeHead;
+            SnakeList = new List<Snake>();
+            for (int i = 1; i <= SnakeQuantity; i++)
+            {
+                await Task.Delay(50);
+                Snake newSnake = new Snake(SnakeColorList[i-1], MyFormGame, this);
+                SnakeList.Add(newSnake);
+                snakeHead = newSnake.Head;
+                CellList[snakeHead - 1].MySnake = newSnake;
+            }
+        }
 
 
+        private void CreatePlayerPin()
+        {
+            int pinSize = 3 * FontSize;
+            for (int i = 0; i < PlayerList.Count; i++)
+            {
+                PictureBox pb = new PictureBox()
+                {
+                    Name = $"playerPin{i+1}",
+                    Image = Image.FromFile($"../../Images/Pins/Pin{PlayerList[i].Color}.png"),
+                    Size = new Size(pinSize, pinSize),
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                    Location = new Point(10+pinSize*i, 810),
+                    BackColor = Color.FromArgb(100, 254, 255, 159),
+                };
+                MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Add(pb);
+            }
+        }
 
 
-
-            Console.WriteLine("PaintLadder Triggered");
+        private void AdjustPlayerPinDisplayOffsetX()
+        {
+            int playerPinOffsetX = 0;
+            for(int i=0; i<PlayerList.Count; i++)
+            {
+                PlayerList[i].PinDisplayOffsetX = playerPinOffsetX;
+                int cellSize = MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Find("cell1", false)[0].Size.Width;
+                int playerPinSize = MyFormGame.Controls.Find("boardPanel", false)[0].Controls.Find("playerPin1", false)[0].Size.Width;
+                playerPinOffsetX += (cellSize-playerPinSize)/(PlayerList.Count-1);
+            }
         }
 
     }

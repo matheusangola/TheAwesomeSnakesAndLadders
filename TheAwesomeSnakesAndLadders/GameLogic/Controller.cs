@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.OleDb;
 using System.Drawing;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Label = System.Windows.Forms.Label;
@@ -20,6 +15,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
         List<Dice> DiceList;
         List<Player> PlayersList;
         FormGame MyFormGame;
+        Random R;
 
 
         public Controller(string gameDificulty, List<Player> playersList, FormGame formgame) 
@@ -31,7 +27,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             CreateDicePanel();
             CreatePlayerPanel();
             GameBoard = new Board(GameDificulty, PlayersList, MyFormGame);
-
+            R = new Random();
             
         }
 
@@ -63,11 +59,11 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                 playerPanel.Controls.Add(playerSubPanel);
 
                 // Create PlayerTurn Label
-                int labelHeight = 40;
+                int labelHeight = 100;
                 Label newLabel = new Label()
                 {
-                    Name = $"labelPlayerName{i}",
-                    Text = $"Player {player.Color}:\n{player.Name}",
+                    Name = $"LabelPlayerName{i}",
+                    Text = $"Player {player.Color}:\n{player.Name}\nPrevious Dice Rolls: {player.PrintPreviousDiceRollsList()}",
                     Font = new Font("Arial", 14),
                     Size = new Size(subPanelWidth, labelHeight),
                     //SizeMode = PictureBoxSizeMode.Zoom,
@@ -79,7 +75,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             }
         }
 
-        public void CreateDicePanel()
+        public async void CreateDicePanel()
         {
             //Create Dice Panel
             Panel dicePanel = new System.Windows.Forms.Panel()
@@ -99,13 +95,14 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             int pictureBoxSize = 280;
             for (int i = 1; i <= 2; i++) 
             {
+                await Task.Delay(100);
                 Dice newDice = new Dice(6);
                 DiceList.Add(newDice);
 
                 PictureBox pb = new PictureBox()
                 {
                     Name = $"pictureBoxDice{i}",
-                    Image = Image.FromFile($"../../Images/Dice1.png"),
+                    Image = Image.FromFile($"../../Images/Dice/Dice1.png"),
                     Size = new Size(pictureBoxSize, pictureBoxSize),
                     SizeMode = PictureBoxSizeMode.Zoom,
                     Location = new Point(10, verticalPosition),
@@ -148,6 +145,9 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
         public async void rollDice(object sender, EventArgs e) 
         {
+            (sender as Button).Enabled = false;
+
+            //Roll Dice
             for (int i = 0; i < DiceList.Count; i++)
             {
                 DiceList[i].GenerateRandomNumber();
@@ -155,27 +155,39 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             PictureBox selectedPictureBox1 = (PictureBox)MyFormGame.Controls.Find("dicePanel", false)[0].Controls.Find($"pictureBoxDice1", false)[0];
             PictureBox selectedPictureBox2 = (PictureBox)MyFormGame.Controls.Find("dicePanel", false)[0].Controls.Find($"pictureBoxDice2", false)[0];
 
+            //Generate Shuffled dice images
             for (int j = 0; j < 15; j++)
             {
-                Random r = new Random();
-                int randomValue1 = r.Next(1, 7);
-                int randomValue2 = r.Next(1, 7);
-                selectedPictureBox1.Image = Image.FromFile($"../../Images/Dice{randomValue1}.png");
-                selectedPictureBox2.Image = Image.FromFile($"../../Images/Dice{randomValue2}.png");
+                int randomValue1 = R.Next(1, 7);
+                int randomValue2 = R.Next(1, 7);
+                selectedPictureBox1.Image = Image.FromFile($"../../Images/Dice/Dice{randomValue1}.png");
+                selectedPictureBox2.Image = Image.FromFile($"../../Images/Dice/Dice{randomValue2}.png");
                 await Task.Delay(50);
             }
-            selectedPictureBox1.Image = Image.FromFile($"../../Images/Dice{DiceList[0].Value}.png");
-            Console.WriteLine(DiceList[0].Value);
-            Console.WriteLine(DiceList[1].Value);
-            selectedPictureBox2.Image = Image.FromFile($"../../Images/Dice{DiceList[1].Value}.png");
+            selectedPictureBox1.Image = Image.FromFile($"../../Images/Dice/Dice{DiceList[0].Value}.png");
+            Console.WriteLine($"Dice 1 value: {DiceList[0].Value}");
+            Console.WriteLine($"Dice 2 value: {DiceList[1].Value}");
+            selectedPictureBox2.Image = Image.FromFile($"../../Images/Dice/Dice{DiceList[1].Value}.png");
+
+
+            //Move Player
             await Task.Delay(100);
             await movePlayer();
+            
+            (sender as Button).Enabled = true;
         }
 
         public async Task movePlayer() 
         {
             //Sum Dice
             int remainingMovements = DiceList[0].Value + DiceList[1].Value;
+
+            //Record DiceRoll in Player's PreviousDiceRollsList
+            CurrentPlayer.PreviousDiceRollsList.Add(remainingMovements);
+
+            //Update previous DiceRolls in Player information SubPanel
+            MyFormGame.Controls.Find("PlayerPanel", false)[0].Controls.Find($"PlayerSubPanel{CurrentPlayer.Number-1}", false)[0].Controls.Find($"LabelPlayerName{CurrentPlayer.Number-1}", false)[0].Text = $"Player {CurrentPlayer.Color}:\n{CurrentPlayer.Name}\nPrevious Dice Rolls: {CurrentPlayer.PrintPreviousDiceRollsList()}";
+            
 
             //Loop player (move + check destination)
             int currentPlayerPosition;
@@ -195,7 +207,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                     nextPlayerPosition = 1;
                     CurrentPlayer.X = 0;
                     CurrentPlayer.Y = 0;
-                    selectedPlayerPin.Location = new Point(CurrentPlayer.X * cellSize, (boardSize - CurrentPlayer.Y * cellSize) - selectedPlayerPin.Size.Height);
+                    selectedPlayerPin.Location = new Point(CurrentPlayer.X * cellSize + CurrentPlayer.PinDisplayOffsetX, (boardSize - CurrentPlayer.Y * cellSize) - selectedPlayerPin.Size.Height);
                     selectedPlayerPin.BringToFront();
                     await Task.Delay(100);
 
@@ -214,9 +226,8 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
                 
                 await Task.Delay(200);
 
-                selectedPlayerPin.Location = new Point(CurrentPlayer.X*cellSize, (boardSize-CurrentPlayer.Y*cellSize)-selectedPlayerPin.Size.Height);
+                selectedPlayerPin.Location = new Point(CurrentPlayer.X*cellSize + CurrentPlayer.PinDisplayOffsetX, (boardSize-CurrentPlayer.Y*cellSize)-selectedPlayerPin.Size.Height);
                 selectedPlayerPin.BringToFront();
-                selectedPlayerPin.Refresh();
 
                 Console.WriteLine($"Player new stats! Player: {CurrentPlayer}");
 
@@ -231,15 +242,37 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             while (remainingMovements > 0);
 
             //////WORKING HERE //////
-            // CheckMysteryBox
+            // Check MysteryBox
             if (GameBoard.CellList[CurrentPlayer.CellNumber-1].MyMysteryBox != null)
             {
                 Console.WriteLine($"MysteryBox Triggered! Current Player: {CurrentPlayer}");
                 var mysteryBoxDestination = GameBoard.CellList[CurrentPlayer.CellNumber - 1].MyMysteryBox.Destination;
+                string message = $"Surprise! Move to Cell number {mysteryBoxDestination}";
+                string title = "Surprise!";
+                MessageBox.Show(message, title);
                 await JumpToPosition(mysteryBoxDestination);
             }
 
-            // Snake or Ladder movement
+            // Check Ladder
+            if (GameBoard.CellList[CurrentPlayer.CellNumber-1].MyLadder != null)
+            {
+                Console.WriteLine($"Ladder Triggered! Current Player: {CurrentPlayer}");
+                var ladderDestination = GameBoard.CellList[CurrentPlayer.CellNumber - 1].MyLadder.Top;
+                string message = $"Congratulations! Take a Shortcut to Cell number {ladderDestination}";
+                string title = "Your Lucky Day!";
+                MessageBox.Show(message, title);
+                await JumpToPosition(ladderDestination);
+            }
+
+            // Check Snake
+            if (GameBoard.CellList[CurrentPlayer.CellNumber - 1].MySnake != null) {
+                Console.WriteLine($"Snake Triggered! Current Player: {CurrentPlayer}");
+                var snakeDestination = GameBoard.CellList[CurrentPlayer.CellNumber - 1].MySnake.Tail;
+                string message = $"Oh no! Go back to Cell number {snakeDestination}";
+                string title = "Unlucky!";
+                MessageBox.Show(message, title);
+                await JumpToPosition(snakeDestination);
+            }
 
             //if not gameover next player's turn
             CurrentPlayer = GameBoard.PlayerList[CurrentPlayer.Number % GameBoard.PlayerList.Count];
@@ -280,7 +313,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
             await Task.Delay(100);
 
-            selectedPlayerPin.Location = new Point(CurrentPlayer.X * cellSize, (boardSize - CurrentPlayer.Y * cellSize) - selectedPlayerPin.Size.Height);
+            selectedPlayerPin.Location = new Point(CurrentPlayer.X * cellSize + CurrentPlayer.PinDisplayOffsetX, (boardSize - CurrentPlayer.Y * cellSize) - selectedPlayerPin.Size.Height);
             selectedPlayerPin.BringToFront();
 
         }

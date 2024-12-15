@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
+
 
 namespace TheAwesomeSnakesAndLadders.GameLogic
 {
@@ -38,21 +34,18 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             board.CellList[newPosition - 1].IsAvailable = false;
             Panel selectedCell = formgame.Controls.Find("boardPanel", false)[0].Controls.Find($"cell{newPosition}", false)[0] as Panel;
             int paddingSize = 10;
-            int newSize = selectedCell.Size.Width - 2*paddingSize;
+            int newSize = selectedCell.Size.Width - 4*paddingSize;
             PictureBox pb = new PictureBox()
             {
-                Image = Image.FromFile("../../Images/MysteryBox.jpg"),
+                Image = Image.FromFile("../../Images/MysteryBox.png"),
                 Size = new Size(newSize, newSize),
                 SizeMode = PictureBoxSizeMode.Zoom,
-                Location = new Point(paddingSize, paddingSize),
-
-
+                Location = new Point(2*paddingSize, 3*paddingSize),
+                BackColor = Color.FromArgb(30, 0, 0, 0)
             };
 
             selectedCell.Controls.Add(pb);
             pb.BringToFront();
-            //selectedCell.Controls.Find($"label{newPosition}", false)[0].BringToFront();
-            
         }
         private void GenerateRandomDestination(FormGame formgame)
         {
@@ -63,8 +56,8 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             {
                 Text = $"Dest: {Destination}"
             };
-            formgame.Controls.Find("boardPanel", false)[0].Controls.Find($"cell{Position}", false)[0].Controls.Add(newLabel);
-            newLabel.BringToFront();
+            //formgame.Controls.Find("boardPanel", false)[0].Controls.Find($"cell{Position}", false)[0].Controls.Add(newLabel);
+            //newLabel.BringToFront();
         }
 
         public override string ToString()
