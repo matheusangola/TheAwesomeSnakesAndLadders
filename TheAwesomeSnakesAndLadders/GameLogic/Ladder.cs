@@ -17,10 +17,12 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
         public int BottomY;
         public int TopX;
         public int TopY;
+        public Random R;
 
 
         public Ladder(string color, FormGame formgame, Board board)
         {
+            R = new Random();
             Color = color;
             InitializeBottom(formgame, board);
             InitializeTop(formgame, board);
@@ -35,12 +37,10 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             int minBottom = 2;
             int maxBottom = board.Size * board.Size - board.Size + 1;
 
-            Random r = new Random();
-
             int newBottom;
             do
             {
-                newBottom = r.Next(minBottom, maxBottom);
+                newBottom = R.Next(minBottom, maxBottom);
             } while (board.CellList[newBottom - 1].IsAvailable == false);
 
             Bottom = newBottom;
@@ -82,12 +82,10 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             int minTop = Bottom + 1;
             int maxTop = board.Size * board.Size -3;
 
-            Random r = new Random();
-
             int newTop;
             do
             {
-                newTop = r.Next(minTop, maxTop);
+                newTop = R.Next(minTop, maxTop);
 
                 //Calculate TopX and TopY
                 int topX = 0;
