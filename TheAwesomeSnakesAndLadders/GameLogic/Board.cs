@@ -191,12 +191,13 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
         }
 
 
-        private void CreateMysteryBoxes()
+        private async void CreateMysteryBoxes()
         {
             int mysteryBoxPosition;
             MysteryBoxList = new List<MysteryBox>();
             for (int i = 1; i <= MysteryBoxQuantity; i++)
             {
+                await Task.Delay(200);
                 MysteryBox newMysteryBox = new MysteryBox(MyFormGame, this);
                 MysteryBoxList.Add(newMysteryBox);
                 mysteryBoxPosition = newMysteryBox.Position;
@@ -211,7 +212,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             LadderList = new List<Ladder>();
             for (int i = 1; i <= LadderQuantity; i++)
             {
-                await Task.Delay(50);
+                await Task.Delay(100);
                 Ladder newLadder = new Ladder(LadderColorList[i-1], MyFormGame, this);
                 LadderList.Add(newLadder);
                 ladderBottom = newLadder.Bottom;
@@ -226,7 +227,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             SnakeList = new List<Snake>();
             for (int i = 1; i <= SnakeQuantity; i++)
             {
-                await Task.Delay(50);
+                await Task.Delay(100);
                 Snake newSnake = new Snake(SnakeColorList[i-1], MyFormGame, this);
                 SnakeList.Add(newSnake);
                 snakeHead = newSnake.Head;

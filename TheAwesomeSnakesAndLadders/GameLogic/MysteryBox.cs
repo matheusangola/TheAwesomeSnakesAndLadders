@@ -9,8 +9,11 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
     {
         public int Position;
         public int Destination;
+        public Random R;
+
         public MysteryBox(FormGame formgame, Board board) 
         {
+            R = new Random();
             InitializePosition(formgame, board);
             GenerateRandomDestination(formgame);
             Console.WriteLine(this);
@@ -20,12 +23,11 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
         {
             int minPosition = 5;
             int maxPosition = board.Size * board.Size - 4;
-
-            Random r = new Random();
+            
             int newPosition;
             do
             {
-                newPosition = r.Next(minPosition, maxPosition);
+                newPosition = R.Next(minPosition, maxPosition);
 
             } while (board.CellList[newPosition - 1].IsAvailable == false);
 
@@ -49,9 +51,8 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
         }
         private void GenerateRandomDestination(FormGame formgame)
         {
-            Random r = new Random();
             int maxMovement = 4;
-            Destination = r.Next(Position - maxMovement, Position + maxMovement + 1);
+            Destination = R.Next(Position - maxMovement, Position + maxMovement + 1);
             Label newLabel = new Label()
             {
                 Text = $"Dest: {Destination}"
@@ -62,7 +63,7 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
 
         public override string ToString()
         {
-            return $"Dest: {Destination} Position: {Position}";
+            return $"[MysteryBox] Dest: {Destination} Position: {Position}";
         }
 
 

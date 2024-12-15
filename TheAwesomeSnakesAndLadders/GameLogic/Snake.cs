@@ -16,10 +16,11 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
         public int TailY;
         public int HeadX;
         public int HeadY;
-
+        public Random R;
 
         public Snake(string color, FormGame formgame, Board board)
         {
+            R = new Random();
             Color = color;
             InitializeHead(formgame, board);
             InitializeTail(formgame, board);
@@ -34,12 +35,10 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             int minHead = board.Size + 1;
             int maxHead = board.Size * board.Size -3;
 
-            Random r = new Random();
-
             int newHead;
             do
             {
-                newHead = r.Next(minHead, maxHead);
+                newHead = R.Next(minHead, maxHead);
             } while (board.CellList[newHead - 1].IsAvailable == false);
 
             Head = newHead;
@@ -83,12 +82,10 @@ namespace TheAwesomeSnakesAndLadders.GameLogic
             int minTail = 1;
             int maxTail = board.Size * board.Size - board.Size + 1;
 
-            Random r = new Random();
-
             int newTail;
             do
             {
-                newTail = r.Next(minTail, maxTail);
+                newTail = R.Next(minTail, maxTail);
 
                 //Calculate BottomX and BottomY
                 int tailX = 0;
